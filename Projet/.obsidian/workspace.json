@@ -22,22 +22,6 @@
             }
           }
         ]
-      },
-      {
-        "id": "8d211d1dfd91c557",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "73124494bcdc4d6f",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Vue graphique"
-            }
-          }
-        ]
       }
     ],
     "direction": "vertical"
@@ -175,11 +159,17 @@
       "canvas:Créer une nouvelle toile": false,
       "daily-notes:Ouvrir la note quotidienne": false,
       "templates:Insérer le modèle": false,
-      "command-palette:Ouvrir la palette de commandes": false
+      "command-palette:Ouvrir la palette de commandes": false,
+      "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "c0dfb608402782b2",
+  "active": "cdfe9fb8666e26cb",
   "lastOpenFiles": [
+    "API_UML_projet_gestion.drawio",
+    "UML_projet_gestion.drawio",
+    "Drawing 2025-01-28 09.12.25.excalidraw.md",
+    "Sans titre.md",
+    "San.md",
     "Bienvenue.md"
   ]
 }

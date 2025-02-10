@@ -1,5 +1,3 @@
-Projet/.obsidian/
-Projet/.obsidian/community-plugins.json
-Projet/.obsidian/plugins/
-Projet/.obsidian/types.json
-Projet/.obsidian/workspace.json
+# Ne pas ignorer le dossier .obsidian pour qu'on ait le même coffre
+
+*.bkp

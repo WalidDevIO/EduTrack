@@ -1,5 +1,5 @@
 
-- API de messagerie
+- API de gestion des messages des étudiants
 - BDD: MongoDB
 - Techno sous-jacente: Servlet
 

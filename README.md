@@ -26,7 +26,7 @@ Ce projet consiste à développer une application web de gestion des effectifs �
   - JPA pour l'accès aux données.
 
 - **Bases de données :**
-  - SQL pour les informations sur les étudiants et les années de formation.
+  - SQL pour les informations sur les étudiants et les données d'authentification.
   - MongoDB pour le stockage des messages.
 
 - **Frontend :**
@@ -34,7 +34,7 @@ Ce projet consiste à développer une application web de gestion des effectifs �
 
 ## Nos contributions au projet
 
-- **API Core :** Point d'entrée unique pour toutes les requêtes, gère l'authentification et la redirection vers les API spécifiques.
+- **API Authentification :** Gère l'authentification.
 - **API Etudiant :** Gère les informations et inscriptions des étudiants.
 - **API Messagerie :** Gère l'envoi et la réception des messages.
 

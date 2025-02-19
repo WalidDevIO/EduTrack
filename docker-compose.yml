@@ -1,0 +1,24 @@
+services:
+  servlet:
+    image: walkloly/tomcat-si:latest
+    ports:
+      - "8085:8080"
+    depends_on:
+      - db
+      - mongodb
+
+  db:
+    image: mariadb:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - si_proj_sql:/var/lib/mysql
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - si_proj_nosql:/data/db

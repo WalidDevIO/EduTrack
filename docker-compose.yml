@@ -22,3 +22,7 @@ services:
       - "27017:27017"
     volumes:
       - si_proj_nosql:/data/db
+
+volumes:
+  si_proj_nosql:
+  si_proj_sql:

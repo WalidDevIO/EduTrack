@@ -3,6 +3,7 @@ package fr.elite.messagesapi.utils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import fr.elite.excpetions.APIException;
 import fr.elite.messagesapi.pojo.Message;
 
 public class MessageJson {
@@ -21,7 +22,7 @@ public class MessageJson {
         return doc.toJson();
     }
 
-    public static Message toMessage(String json) {
+    public static Message toMessage(String json) throws APIException  {
         if (json == null || json.isEmpty()) {
             return null;
         }
@@ -33,15 +34,24 @@ public class MessageJson {
                     ? new ObjectId(doc.getString("id"))
                     : null;
 
-            String text = doc.getString("text");
-            Boolean readed = doc.getBoolean("readed");
-            Long student = doc.getLong("student");
+            try {
+                String text = doc.getString("text");
+                Boolean readed = doc.getBoolean("readed");
+                Long student = doc.getLong("student");
 
-            return new Message(id, text, readed, student);
+                if(text == null || readed == null || student == null) {
+                    throw new APIException("Le message n'est pas valide!", 400);
+                }
 
+                return new Message(id, text, readed, student);
+            } catch(ClassCastException e) {
+                throw new APIException("Le message n'est pas valide!", 400);
+            }
+
+        } catch (APIException e) {
+            throw e;
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new APIException("Le message n'est pas valide!", 400);
         }
     }
 }

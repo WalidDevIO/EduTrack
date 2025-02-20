@@ -31,18 +31,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Message'
-        '404':
-          description: Student not found
+
+  /messages/post:
     post:
-      summary: Create a new message for a student
+      summary: Create a new message
       tags:
         - Messages
-      parameters:
-        - name: student
-          in: path
-          required: true
-          schema:
-            type: integer
       requestBody:
         required: true
         content:

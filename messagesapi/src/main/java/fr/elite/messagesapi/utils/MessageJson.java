@@ -37,7 +37,7 @@ public class MessageJson {
             try {
                 String text = doc.getString("text");
                 Boolean readed = doc.getBoolean("readed");
-                Long student = doc.getLong("student");
+                Integer student = doc.getInteger("student");
 
                 if(text == null || readed == null || student == null) {
                     throw new APIException("Le message n'est pas valide!", 400);

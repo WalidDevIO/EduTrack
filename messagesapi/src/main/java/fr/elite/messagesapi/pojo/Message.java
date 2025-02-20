@@ -12,7 +12,7 @@ public class Message {
 
     private Boolean readed;
 
-    private Long student;
+    private Integer student;
 
     public ObjectId getId() {
         return id;
@@ -26,7 +26,7 @@ public class Message {
         return readed;
     }
 
-    public Long getStudent() {
+    public Integer getStudent() {
         return student;
     }
 
@@ -42,7 +42,7 @@ public class Message {
         this.readed = readed;
     }
     
-    public void setStudent(Long student) {
+    public void setStudent(Integer student) {
         this.student = student;
     }
 
@@ -50,7 +50,7 @@ public class Message {
 
     }
 
-    public Message(ObjectId id, String text, Boolean readed, Long student) {
+    public Message(ObjectId id, String text, Boolean readed, Integer student) {
         this.id = id;
         this.text = text;
         this.readed = readed;

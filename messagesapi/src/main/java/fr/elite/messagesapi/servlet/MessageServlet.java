@@ -60,7 +60,7 @@ public class MessageServlet extends HttpServlet {
 
         if(method == "GET") {
             try {
-                Long studentNumber = Long.parseLong(pathInfo);
+                Integer studentNumber = Integer.parseInteger(pathInfo);
                 handleStudentNumberMapping(request, response, studentNumber);
                 return;
             } catch (Exception e) {}
@@ -72,7 +72,7 @@ public class MessageServlet extends HttpServlet {
         }
     }
 
-    private void handleStudentNumberMapping(HttpServletRequest request, HttpServletResponse response, Long studentNumber) throws IOException {
+    private void handleStudentNumberMapping(HttpServletRequest request, HttpServletResponse response, Integer studentNumber) throws IOException {
         //Récupérer Message correspondant et les mettre dans une liste
         List<Message> list = new ArrayList<>();
         access.find(Filters.eq("student", studentNumber)).forEach(list::add);
@@ -99,7 +99,7 @@ public class MessageServlet extends HttpServlet {
         try {
             oid = new ObjectId(id);
         } catch(IllegalArgumentException e) {
-            throw new APIException("L'ID fourni n'est pas valide", 400);
+            throw new APIException("Route inconnue", 404);
         }
 
         if(method.equals("DELETE")) {
@@ -109,6 +109,8 @@ public class MessageServlet extends HttpServlet {
         } else if(method.equals("GET")) {
 
         }
+
+        throw new APIException("Route inconnue", 404);
     }
     
     private void handleNewMessage(HttpServletRequest request, HttpServletResponse response) {

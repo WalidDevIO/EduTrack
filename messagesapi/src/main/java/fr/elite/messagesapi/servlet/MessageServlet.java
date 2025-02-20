@@ -60,7 +60,7 @@ public class MessageServlet extends HttpServlet {
 
         if(method == "GET") {
             try {
-                Integer studentNumber = Integer.parseInteger(pathInfo);
+                Integer studentNumber = Integer.parseInt(pathInfo);
                 handleStudentNumberMapping(request, response, studentNumber);
                 return;
             } catch (Exception e) {}

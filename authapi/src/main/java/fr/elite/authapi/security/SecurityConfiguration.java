@@ -9,11 +9,10 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    @SuppressWarnings({"removal", "deprecation"})
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .authorizeRequests().anyRequest().permitAll();
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(requests -> requests.anyRequest().anonymous());
         return http.build();
     }
 

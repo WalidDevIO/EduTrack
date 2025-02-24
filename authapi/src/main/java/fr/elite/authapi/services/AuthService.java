@@ -8,9 +8,9 @@ public interface AuthService {
 
     AuthResponse login(AuthRequest request);
 
-    AuthResponse unregister(Long id);
+    AuthResponse unregister(String username);
 
-    AuthResponse resetPassword(Long id, String newPassword);
+    AuthResponse resetPassword(String username, String newPassword);
 
     boolean validateToken(String token);
 

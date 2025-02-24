@@ -6,12 +6,15 @@ import fr.elite.authapi.entities.Access;
 import fr.elite.authapi.repositories.AccessRepository;
 import fr.elite.authapi.security.JwtUtil;
 import fr.elite.authapi.services.AuthService;
+import jakarta.transaction.Transactional;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@Transactional
 public class AuthServiceImpl implements AuthService {
     private final AccessRepository accessRepository;
     private final JwtUtil jwtUtil;
@@ -49,14 +52,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponse unregister(Long id) {
-        accessRepository.deleteById(id);
+    public AuthResponse unregister(String username) {
+        accessRepository.deleteByUsername(username);
         return new AuthResponse("User unregistered successfully");
     }
 
     @Override
-    public AuthResponse resetPassword(Long id, String newPassword) {
-        Access access = accessRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public AuthResponse resetPassword(String username, String newPassword) {
+        Access access = accessRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
         access.setPassword(encoder.encode(newPassword));
         accessRepository.save(access);
         return new AuthResponse("Password reset successful");

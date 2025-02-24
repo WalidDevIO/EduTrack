@@ -26,14 +26,14 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    @DeleteMapping("/unregister/{id}")
-    public ResponseEntity<AuthResponse> unregister(@PathVariable Long id) {
-        return ResponseEntity.ok(authService.unregister(id));
+    @DeleteMapping("/unregister/{username}")
+    public ResponseEntity<AuthResponse> unregister(@PathVariable String username) {
+        return ResponseEntity.ok(authService.unregister(username));
     }
 
-    @PutMapping("/reset-password/{id}")
-    public ResponseEntity<AuthResponse> resetPassword(@PathVariable Long id, @RequestBody String newPassword) {
-        return ResponseEntity.ok(authService.resetPassword(id, newPassword));
+    @PutMapping("/reset-password/{username}")
+    public ResponseEntity<AuthResponse> resetPassword(@PathVariable String username, @RequestBody String newPassword) {
+        return ResponseEntity.ok(authService.resetPassword(username, newPassword));
     }
 
     @GetMapping("/validate-token")

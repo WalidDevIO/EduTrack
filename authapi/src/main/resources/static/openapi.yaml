@@ -1,0 +1,128 @@
+openapi: 3.0.1
+info:
+  title: Auth API
+  description: API d'authentification
+  version: 1.0.0
+paths:
+  /auth/register:
+    post:
+      summary: Inscription d'un utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '200':
+          description: Utilisateur inscrit avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  
+  /auth/login:
+    post:
+      summary: Connexion d'un utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '200':
+          description: Connexion réussie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  
+  /auth/unregister/{username}:
+    delete:
+      summary: Désinscription d'un utilisateur
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Utilisateur supprimé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  
+  /auth/reset-password/{username}:
+    put:
+      summary: Réinitialisation du mot de passe
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+              example: "newPassword123"
+      responses:
+        '200':
+          description: Mot de passe réinitialisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  
+  /auth/validate-token:
+    get:
+      summary: Validation du token
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "Bearer your_token_here"
+      responses:
+        '200':
+          description: Token valide
+          content:
+            application/json:
+              schema:
+                type: boolean
+  
+  /auth/logout:
+    delete:
+      summary: Déconnexion de l'utilisateur
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "Bearer your_token_here"
+      responses:
+        '200':
+          description: Déconnexion réussie
+  
+components:
+  schemas:
+    AuthRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string

@@ -2,6 +2,7 @@ package fr.elite.messagesapi.servlet;
 
 import com.mongodb.client.model.Filters;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -107,7 +108,19 @@ public class MessageServlet extends HttpServlet {
         } else if(method.equals("PUT")) {
 
         } else if(method.equals("GET")) {
-
+            Message msg = access.find(Filters.eq("_id", oid)).first();
+            if(msg == null) {
+                throw new APIException("Le message d'id " + oid.toHexString() + " n'existe pas", 404);
+            }
+            response.setContentType("application/json; charset=UTF-8");
+            PrintWriter out;
+            try {
+                out = response.getWriter();
+            } catch (IOException e) {
+                throw new APIException("Erreur interne", 500);
+            }
+            out.println(MessageJson.toJson(msg));
+            out.close();
         }
 
         throw new APIException("Route inconnue", 404);

@@ -2,6 +2,8 @@ package fr.elite.excpetions;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 
 import fr.elite.messagesapi.config.Conf;
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,8 +49,11 @@ public class APIException extends Exception {
         sb.append("\"");
 
         if (Conf.mode == "DEBUG") {
+            Writer writer = new StringWriter();
+            printStackTrace(new PrintWriter(writer));
+            String s = writer.toString();
             sb.append(", \"stacktrace\": \"");
-            sb.append(getStackTrace().toString());
+            sb.append(s);
             sb.append("\"");
         }
 

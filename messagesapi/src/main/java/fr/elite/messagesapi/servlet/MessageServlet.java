@@ -2,7 +2,6 @@ package fr.elite.messagesapi.servlet;
 
 import com.mongodb.client.model.Filters;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -104,8 +103,14 @@ public class MessageServlet extends HttpServlet {
         }
 
         if(method.equals("DELETE")) {
+
+
+
             
         } else if(method.equals("PUT")) {
+
+
+
 
         } else if(method.equals("GET")) {
             Message msg = access.find(Filters.eq("_id", oid)).first();
@@ -123,7 +128,7 @@ public class MessageServlet extends HttpServlet {
             out.close();
         }
 
-        throw new APIException("Route inconnue", 404);
+        throw new APIException("Méthode non implémenté", 501);
     }
     
     private void handleNewMessage(HttpServletRequest request, HttpServletResponse response) {

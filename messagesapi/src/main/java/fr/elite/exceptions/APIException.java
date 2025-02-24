@@ -1,4 +1,4 @@
-package fr.elite.excpetions;
+package fr.elite.exceptions;
 
 import java.io.IOException;
 import java.io.PrintWriter;

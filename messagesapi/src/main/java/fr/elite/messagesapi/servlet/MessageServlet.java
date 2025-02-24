@@ -12,7 +12,7 @@ import org.bson.types.ObjectId;
 
 import com.mongodb.client.MongoCollection;
 
-import fr.elite.excpetions.APIException;
+import fr.elite.exceptions.APIException;
 import fr.elite.messagesapi.access.MongoAccessSingleton;
 import fr.elite.messagesapi.pojo.Message;
 import fr.elite.messagesapi.utils.MessageJson;

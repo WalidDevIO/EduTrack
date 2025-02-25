@@ -1,18 +1,21 @@
 package fr.elite.authapi.services;
 
-import fr.elite.authapi.dtos.AuthResponse;
-import fr.elite.authapi.dtos.AuthRequest;
+import fr.elite.authapi.dtos.responses.BasicResponse;
+import fr.elite.authapi.dtos.responses.MeResponse;
+import fr.elite.authapi.dtos.responses.TokenResponse;
+import fr.elite.authapi.dtos.requests.AuthRequest;
+import fr.elite.authapi.dtos.requests.RegisterRequest;
 
 public interface AuthService {
-    AuthResponse register(AuthRequest request);
+    BasicResponse register(RegisterRequest request);
 
-    AuthResponse login(AuthRequest request);
+    TokenResponse login(AuthRequest request);
 
-    AuthResponse unregister(String username);
+    BasicResponse unregister(String username);
 
-    AuthResponse resetPassword(String username, String newPassword);
+    BasicResponse resetPassword(String username, String newPassword);
 
-    boolean validateToken(String token);
+    MeResponse validateToken(String token);
 
     void logout(String token);
 }

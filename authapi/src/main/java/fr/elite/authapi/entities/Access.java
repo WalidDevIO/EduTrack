@@ -24,5 +24,6 @@ public class Access {
     /**
      * Si null, l'accès correspond à un compte admin.
      */
+    @Column(unique = true)
     private Long student;
 }

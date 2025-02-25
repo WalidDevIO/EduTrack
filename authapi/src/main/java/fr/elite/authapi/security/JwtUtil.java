@@ -42,4 +42,14 @@ public class JwtUtil {
     public void invalidateToken(String token) {
         invalidatedTokens.put(token, true);
     }
+
+    public String getUsername(String token) {
+        return Jwts
+            .parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .getBody()
+            .getSubject();
+    }
 }

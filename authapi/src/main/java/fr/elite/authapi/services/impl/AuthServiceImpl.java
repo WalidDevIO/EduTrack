@@ -1,73 +1,79 @@
 package fr.elite.authapi.services.impl;
 
-import fr.elite.authapi.dtos.AuthResponse;
-import fr.elite.authapi.dtos.AuthRequest;
+import fr.elite.authapi.dtos.responses.BasicResponse;
+import fr.elite.authapi.dtos.responses.MeResponse;
+import fr.elite.authapi.dtos.responses.TokenResponse;
+import fr.elite.authapi.dtos.requests.AuthRequest;
+import fr.elite.authapi.dtos.requests.RegisterRequest;
 import fr.elite.authapi.entities.Access;
 import fr.elite.authapi.repositories.AccessRepository;
 import fr.elite.authapi.security.JwtUtil;
 import fr.elite.authapi.services.AuthService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
+@Service("authService")
 @Transactional
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final AccessRepository accessRepository;
     private final JwtUtil jwtUtil;
-    private final BCryptPasswordEncoder encoder;
-
-    public AuthServiceImpl(AccessRepository accessRepository, JwtUtil jwtUtil) {
-        this.accessRepository = accessRepository;
-        this.jwtUtil = jwtUtil;
-        this.encoder = new BCryptPasswordEncoder();
-    }
+    private final PasswordEncoder encoder;
 
     @Override
-    public AuthResponse register(AuthRequest request) {
+    public BasicResponse register(RegisterRequest request) {
         if (accessRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new RuntimeException("Username already exists");
         }
         Access access = new Access();
         access.setUsername(request.getUsername());
         access.setPassword(encoder.encode(request.getPassword()));
-        access.setStudent(null); // Par défaut, compte admin
+        access.setStudent(request.getStudent());
 
         accessRepository.save(access);
-        return new AuthResponse("User registered successfully");
+        return new BasicResponse("User registered successfully");
     }
 
     @Override
-    public AuthResponse login(AuthRequest request) {
+    public TokenResponse login(AuthRequest request) {
         Optional<Access> accessOpt = accessRepository.findByUsername(request.getUsername());
         if (accessOpt.isEmpty() || !encoder.matches(request.getPassword(), accessOpt.get().getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
         String token = jwtUtil.generateToken(request.getUsername());
-        return new AuthResponse("Login successful", token);
+        return new TokenResponse("Login successful", token);
     }
 
     @Override
-    public AuthResponse unregister(String username) {
+    public BasicResponse unregister(String username) {
         accessRepository.deleteByUsername(username);
-        return new AuthResponse("User unregistered successfully");
+        return new BasicResponse("User unregistered successfully");
     }
 
     @Override
-    public AuthResponse resetPassword(String username, String newPassword) {
+    public BasicResponse resetPassword(String username, String newPassword) {
         Access access = accessRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
         access.setPassword(encoder.encode(newPassword));
         accessRepository.save(access);
-        return new AuthResponse("Password reset successful");
+        return new BasicResponse("Password reset successful");
     }
 
     @Override
-    public boolean validateToken(String token) {
-        return jwtUtil.validateToken(token);
+    public MeResponse validateToken(String token) {
+        boolean valid = jwtUtil.validateToken(token);
+        Access access = null;
+        if(valid) {
+            String username = jwtUtil.getUsername(token);
+            access = accessRepository.findByUsername(username).orElse(null);
+        }
+
+        return new MeResponse(valid, access.getStudent());
     }
 
     @Override

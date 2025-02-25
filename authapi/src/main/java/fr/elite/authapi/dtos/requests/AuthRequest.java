@@ -1,4 +1,4 @@
-package fr.elite.authapi.dtos;
+package fr.elite.authapi.dtos.requests;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

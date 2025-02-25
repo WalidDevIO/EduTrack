@@ -1,7 +1,10 @@
 package fr.elite.authapi.controllers;
 
-import fr.elite.authapi.dtos.AuthRequest;
-import fr.elite.authapi.dtos.AuthResponse;
+import fr.elite.authapi.dtos.requests.AuthRequest;
+import fr.elite.authapi.dtos.requests.RegisterRequest;
+import fr.elite.authapi.dtos.responses.BasicResponse;
+import fr.elite.authapi.dtos.responses.MeResponse;
+import fr.elite.authapi.dtos.responses.TokenResponse;
 import fr.elite.authapi.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -17,27 +20,27 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody AuthRequest request) {
+    public ResponseEntity<BasicResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody AuthRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 
     @DeleteMapping("/unregister/{username}")
-    public ResponseEntity<AuthResponse> unregister(@PathVariable String username) {
+    public ResponseEntity<BasicResponse> unregister(@PathVariable String username) {
         return ResponseEntity.ok(authService.unregister(username));
     }
 
     @PutMapping("/reset-password/{username}")
-    public ResponseEntity<AuthResponse> resetPassword(@PathVariable String username, @RequestBody String newPassword) {
+    public ResponseEntity<BasicResponse> resetPassword(@PathVariable String username, @RequestBody String newPassword) {
         return ResponseEntity.ok(authService.resetPassword(username, newPassword));
     }
 
-    @GetMapping("/validate-token")
-    public ResponseEntity<Boolean> validateToken(@RequestHeader("Authorization") String authHeader) {
+    @GetMapping("/me")
+    public ResponseEntity<MeResponse> validateToken(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.replace("Bearer ", "");
         return ResponseEntity.ok(authService.validateToken(token));
     }
@@ -46,6 +49,6 @@ public class AuthController {
     public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.replace("Bearer ", "");
         authService.logout(token);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

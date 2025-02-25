@@ -1,11 +1,15 @@
 <template>
-    <div>
+  <div class="message-container">
+    <div class="message-list">
       <ListeMessage @message-selected="handlerClick" :messages="messages" />
+    </div>
+    <div class="message-details">
       <DetailsMessage :messageSelected="messageSelected" />
     </div>
-  </template>
+  </div>
+</template>
   
-  <script>
+<script>
   import ListeMessage from './ListeMessage.vue';
   import DetailsMessage from './DetailsMessage.vue';
   
@@ -42,4 +46,24 @@
         this.fetchAllMessages()
     },
   };
-  </script>
+</script>
+
+<style scoped>
+.message-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px;
+}
+
+.message-list {
+  flex: 1;
+  border-right: 1px solid #ccc;
+  padding-right: 20px;
+}
+
+.message-details {
+  flex: 2;
+  padding-left: 20px;
+}
+</style>

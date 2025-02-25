@@ -2,6 +2,7 @@ package fr.elite.messagesapi.servlet;
 
 import com.mongodb.client.model.Filters;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -27,6 +28,15 @@ public class MessageServlet extends HttpServlet {
     private MongoCollection<Message> access = MongoAccessSingleton.getDatabase();
 
     @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
+        response.setHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
+        response.setHeader("Access-Control-Max-Age", "1728000");
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         handle(request, response, "GET");
     }
@@ -47,25 +57,30 @@ public class MessageServlet extends HttpServlet {
     }
 
     private void handle(HttpServletRequest request, HttpServletResponse response, String method) {
-        String pathInfo = request.getPathInfo();
-        if (pathInfo == null || pathInfo.isEmpty()) {
-            // Handle erreur 400
-        }
-        pathInfo = pathInfo.replace("/", "");
-
-        if(pathInfo.equals("post") && method == "POST") {
-            handleNewMessage(request, response);
-            return;
-        }
-
-        if(method == "GET") {
-            try {
-                Integer studentNumber = Integer.parseInt(pathInfo);
-                handleStudentNumberMapping(request, response, studentNumber);
-                return;
-            } catch (Exception e) {}
-        }
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
+        response.setHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
+        response.setHeader("Access-Control-Max-Age", "1728000");
+        response.setContentType("application/json; charset=UTF-8");
         try {
+            String pathInfo = request.getPathInfo();
+            if (pathInfo == null || pathInfo.isEmpty()) {
+                // Handle erreur 400
+            }
+            pathInfo = pathInfo.replace("/", "");
+
+            if(pathInfo.equals("post") && method == "POST") {
+                handleNewMessage(request, response);
+                return;
+            }
+
+            if(method == "GET") {
+                try {
+                    Integer studentNumber = Integer.parseInt(pathInfo);
+                    handleStudentNumberMapping(request, response, studentNumber);
+                    return;
+                } catch (Exception e) {}
+            }
             handleMessageIdMapping(request, response, method, pathInfo);
         } catch (APIException e) {
             e.generateHttpResponse(response);
@@ -76,13 +91,6 @@ public class MessageServlet extends HttpServlet {
         //Récupérer Message correspondant et les mettre dans une liste
         List<Message> list = new ArrayList<>();
         access.find(Filters.eq("student", studentNumber)).forEach(list::add);
-
-        //Préparer les headers de la réponse (CORS et type de contenu)
-        response.addHeader("Access-Control-Allow-Origin", "*");
-        response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
-        response.addHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
-        response.addHeader("Access-Control-Max-Age", "1728000");
-        response.setContentType("application/json; charset=UTF-8");
 
         //Ecrire un tableau vide ou contenant les messages sérializés en json séparés par des virgules
         PrintWriter out = response.getWriter();
@@ -108,16 +116,40 @@ public class MessageServlet extends HttpServlet {
 
             
         } else if(method.equals("PUT")) {
-
-
-
-
+            BufferedReader reader = null;
+            try {
+                reader = request.getReader();
+            } catch (IOException e){
+                throw new APIException("Erreur interne", 500);
+            }
+            StringBuilder sb = new StringBuilder();
+            String line;
+            try {
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+            } catch (IOException e) {
+                throw new APIException("Erreur interne", 500);
+            }
+            Message msg = MessageJson.toMessage(sb.toString());
+            if(msg == null) {
+                throw new APIException("Erreur de format", 400);
+            } else {
+                access.replaceOne(Filters.eq("_id", oid), msg);
+            }
+            PrintWriter out;
+            try {
+                out = response.getWriter();
+            } catch (IOException e) {
+                throw new APIException("Erreur interne", 500);
+            }
+            out.println(MessageJson.toJson(msg));
+            out.close();
         } else if(method.equals("GET")) {
             Message msg = access.find(Filters.eq("_id", oid)).first();
             if(msg == null) {
                 throw new APIException("Le message d'id " + oid.toHexString() + " n'existe pas", 404);
             }
-            response.setContentType("application/json; charset=UTF-8");
             PrintWriter out;
             try {
                 out = response.getWriter();
@@ -131,8 +163,40 @@ public class MessageServlet extends HttpServlet {
         throw new APIException("Méthode non implémenté", 501);
     }
     
-    private void handleNewMessage(HttpServletRequest request, HttpServletResponse response) {
+    private void handleNewMessage(HttpServletRequest request, HttpServletResponse response) throws APIException {
         // Méthode POST => Créer un message
+        // Récupérer le message depuis le corps de la requête
+        BufferedReader reader = null;
+        try {
+            reader = request.getReader();
+        } catch (IOException e){
+            throw new APIException("Erreur interne", 500);
+        }
+        StringBuilder sb = new StringBuilder();
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (IOException e) {
+            throw new APIException("Erreur interne", 500);
+        }
+        Message msg = MessageJson.toMessagePOST(sb.toString());
+        if(msg == null) {
+            throw new APIException("Erreur de format", 400);
+        } else {
+            //msg.setReaded(false);
+            access.insertOne(msg);
+        }
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+        } catch (IOException e) {
+            throw new APIException("Erreur interne", 500);
+        }
+        response.setStatus(201);
+        out.println(MessageJson.toJson(msg));
+        out.close();
     }
 
 }

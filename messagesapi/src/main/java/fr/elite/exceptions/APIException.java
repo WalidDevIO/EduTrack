@@ -26,12 +26,6 @@ public class APIException extends Exception {
     }
 
     public void generateHttpResponse(HttpServletResponse response) {
-        response.addHeader("Access-Control-Allow-Origin", "*");
-        response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
-        response.addHeader("Access-Control-Allow-Headers",
-                "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
-        response.addHeader("Access-Control-Max-Age", "1728000");
-        response.setContentType("application/json; charset=UTF-8");
         response.setStatus(status);
 
         // Ecrire un tableau vide ou contenant les messages sérializés en json séparés

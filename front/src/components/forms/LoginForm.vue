@@ -1,6 +1,6 @@
 <template>
 <VContainer class="h-100">
-    <VSheet :elevation="5" class="h-75 pa-5 rounded-lg">
+    <VSheet elevation="5" class="h-75 pa-5 rounded-lg">
       <h2 class="mb-2">{{ message }}</h2>
       <VForm>
         <VTextField v-model="username"/>

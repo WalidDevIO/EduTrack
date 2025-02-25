@@ -22,7 +22,7 @@
             </div>
             <v-divider></v-divider>
             <div class="py-5">
-                <LoginForm />
+                <LoginForm :auth="() => {}"/>
             </div>
             <v-divider></v-divider>
             <div class="py-5">

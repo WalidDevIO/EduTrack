@@ -111,11 +111,23 @@ public class MessageServlet extends HttpServlet {
         }
 
         if(method.equals("DELETE")) {
-
-
-
             
+            Message msg = access.find(Filters.eq("_id", oid)).first();
+            if(msg == null) {
+                throw new APIException("Le message d'id " + oid.toHexString() + " n'existe pas", 404);
+            }
+            PrintWriter out;
+            try {
+                out = response.getWriter();
+            } catch (IOException e) {
+                throw new APIException("Erreur interne", 500);
+            }
+            access.deleteOne(Filters.eq("_id", oid));
+            out.println("Le message d'id " + oid.toHexString() + " a été supprimé");
+            out.close();
+
         } else if(method.equals("PUT")) {
+            
             BufferedReader reader = null;
             try {
                 reader = request.getReader();
@@ -145,7 +157,9 @@ public class MessageServlet extends HttpServlet {
             }
             out.println(MessageJson.toJson(msg));
             out.close();
+
         } else if(method.equals("GET")) {
+            
             Message msg = access.find(Filters.eq("_id", oid)).first();
             if(msg == null) {
                 throw new APIException("Le message d'id " + oid.toHexString() + " n'existe pas", 404);
@@ -158,6 +172,7 @@ public class MessageServlet extends HttpServlet {
             }
             out.println(MessageJson.toJson(msg));
             out.close();
+
         }
 
         throw new APIException("Méthode non implémenté", 501);
@@ -185,7 +200,6 @@ public class MessageServlet extends HttpServlet {
         if(msg == null) {
             throw new APIException("Erreur de format", 400);
         } else {
-            //msg.setReaded(false);
             access.insertOne(msg);
         }
         PrintWriter out;

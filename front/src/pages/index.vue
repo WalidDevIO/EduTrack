@@ -26,10 +26,6 @@
             </div>
             <v-divider></v-divider>
             <div class="py-5">
-                <RegisterForm />
-            </div>
-            <v-divider></v-divider>
-            <div class="py-5">
                 <UeForm />
             </div>
             <v-divider></v-divider>

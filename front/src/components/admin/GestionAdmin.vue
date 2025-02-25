@@ -3,7 +3,7 @@
         <VSheet elevation="5" class="h-75 pa-5 rounded-lg">
             <h1 class="mb-6">Espace d'administration</h1>
             <VTabs v-model="selectedTab" grow>
-                <VTab value="formationsGestion">Gestion globale des formations</VTab>
+                <VTab value="formationsGestion">Gestion des formations</VTab>
                 <VTab value="formationGestion">Gestion d'une formation</VTab>
             </VTabs>
             <VTabsWindow v-model="selectedTab">

@@ -3,8 +3,8 @@
     <VSheet elevation="5" class="h-75 pa-5 rounded-lg">
       <h2 class="mb-2">{{ message }}</h2>
       <VForm>
-        <VTextField v-model="username"/>
-        <VTextField v-model="password" type="password"/>
+        <VTextField v-model="username" placeholder="Nom d'utilisateur"/>
+        <VTextField v-model="password" type="password" placeholder="Mot de passe"/>
         <VBtn @click="auth(username, password)">{{ message }}</VBtn>
       </VForm>
     </VSheet>

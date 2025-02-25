@@ -63,17 +63,21 @@ public class MessageServlet extends HttpServlet {
         response.setHeader("Access-Control-Max-Age", "1728000");
         response.setContentType("application/json; charset=UTF-8");
         try {
+            // Récupérer le pathInfo qui est la partie de l'URL après le nom de la servlet
             String pathInfo = request.getPathInfo();
             if (pathInfo == null || pathInfo.isEmpty()) {
-                // Handle erreur 400
+                // Handle erreur 404
+                throw new APIException("Route inconnue", 404);
             }
             pathInfo = pathInfo.replace("/", "");
 
+            //Partie nouveau message
             if(pathInfo.equals("post") && method == "POST") {
                 handleNewMessage(request, response);
                 return;
             }
 
+            //Partie recupération message par numero étudiant
             if(method == "GET") {
                 try {
                     Integer studentNumber = Integer.parseInt(pathInfo);
@@ -81,6 +85,7 @@ public class MessageServlet extends HttpServlet {
                     return;
                 } catch (Exception e) {}
             }
+
             handleMessageIdMapping(request, response, method, pathInfo);
         } catch (APIException e) {
             e.generateHttpResponse(response);
@@ -112,6 +117,7 @@ public class MessageServlet extends HttpServlet {
 
         if(method.equals("DELETE")) {
             
+            //Vérifier si le message existe
             Message msg = access.find(Filters.eq("_id", oid)).first();
             if(msg == null) {
                 throw new APIException("Le message d'id " + oid.toHexString() + " n'existe pas", 404);
@@ -122,12 +128,16 @@ public class MessageServlet extends HttpServlet {
             } catch (IOException e) {
                 throw new APIException("Erreur interne", 500);
             }
+            //Supprimer le message
             access.deleteOne(Filters.eq("_id", oid));
+            //Reponse 204 définie dans openapi.yml
+            response.setStatus(204);
             out.println("Le message d'id " + oid.toHexString() + " a été supprimé");
             out.close();
 
         } else if(method.equals("PUT")) {
             
+            //Mettre à jour le message
             BufferedReader reader = null;
             try {
                 reader = request.getReader();
@@ -143,6 +153,7 @@ public class MessageServlet extends HttpServlet {
             } catch (IOException e) {
                 throw new APIException("Erreur interne", 500);
             }
+            //Conversion du message JSON en objet Message
             Message msg = MessageJson.toMessage(sb.toString());
             if(msg == null) {
                 throw new APIException("Erreur de format", 400);
@@ -155,6 +166,7 @@ public class MessageServlet extends HttpServlet {
             } catch (IOException e) {
                 throw new APIException("Erreur interne", 500);
             }
+            response.setStatus(200);
             out.println(MessageJson.toJson(msg));
             out.close();
 
@@ -196,6 +208,7 @@ public class MessageServlet extends HttpServlet {
         } catch (IOException e) {
             throw new APIException("Erreur interne", 500);
         }
+        //Conversion du message JSON en objet Message avec readed = false
         Message msg = MessageJson.toMessagePOST(sb.toString());
         if(msg == null) {
             throw new APIException("Erreur de format", 400);

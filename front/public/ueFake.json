@@ -1,0 +1,12 @@
+[
+    {
+        "nom": "Systèmes d'Information",
+        "responsable": "Eric Cariou"
+    },
+    {
+        "nom": "Une UE optionnelle",
+        "responsable": "Un responsable",
+        "option": true,
+        "capacite": -1
+    }
+]

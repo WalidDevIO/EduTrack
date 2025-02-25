@@ -1,3 +1,3 @@
 <template>
-    
+    infos étudiant
 </template>

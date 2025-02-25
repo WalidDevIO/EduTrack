@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import DataTableFormation from '@/components/formation/DataTableFormation.vue';
+import DataTableUe from '@/components/formation/DataTableUe.vue';
+
+</script>
+
 <template>
     <v-app>
         <v-container>
@@ -14,7 +20,7 @@
             </div>
             <v-divider></v-divider>
             <div class="py-5">
-                <ListeFormation />
+                <DataTableFormation />
             </div>
             <v-divider></v-divider>
             <div class="py-5">
@@ -30,7 +36,7 @@
             </div>
             <v-divider></v-divider>
             <div class="py-5">
-                <ListeUE />
+                <DataTableUe/>
             </div>
         </v-container>
     </v-app>

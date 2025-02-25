@@ -54,4 +54,37 @@ public class MessageJson {
             throw new APIException("Le message n'est pas valide!", 400);
         }
     }
+
+    public static Message toMessagePOST(String json) throws APIException  {
+        if (json == null || json.isEmpty()) {
+            return null;
+        }
+
+        try {
+            Document doc = Document.parse(json);
+
+            ObjectId id = doc.containsKey("id") && doc.getString("id") != null
+                    ? new ObjectId(doc.getString("id"))
+                    : null;
+
+            try {
+                String text = doc.getString("text");
+                Boolean readed = false;
+                Integer student = doc.getInteger("student");
+
+                if(text == null || student == null) {
+                    throw new APIException("Le message n'est pas valide!", 400);
+                }
+
+                return new Message(id, text, readed, student);
+            } catch(ClassCastException e) {
+                throw new APIException("Le message n'est pas valide!", 400);
+            }
+
+        } catch (APIException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new APIException("Le message n'est pas valide!", 400);
+        }
+    }
 }

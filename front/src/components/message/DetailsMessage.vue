@@ -1,9 +1,7 @@
 <template>
     <div v-if="messageSelected">
-        <h2>{{ messageSelected.titre }}</h2>
-        <p><strong>Auteur:</strong> {{ messageSelected.auteur }}</p>
-        <p><strong>Date:</strong> {{ messageSelected.date }}</p>
-        <p><strong>Contenu:</strong> {{ messageSelected.contenu }}</p>
+        <h2>{{ messageSelected.text }}</h2>
+        <p><strong>Lu:</strong> {{ messageSelected.readed ? "Oui" : "Non" }}</p>
     </div>
 </template>
   

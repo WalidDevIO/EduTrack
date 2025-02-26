@@ -17,7 +17,7 @@
 
         <VTextField type="number" v-model="formation.tpsize" :rules="[v => Number.isInteger(Number.parseInt(v)) && Number.parseInt(v) > 0 || 'Ce champs doit être un nombre !']" placeholder="Taille max des groupes de TP"/>
 
-        <VBtn @click.prevent="console.log(JSON.stringify(formation))" class="mt-4" :disabled="!isFormValid">
+        <VBtn @click.prevent="emit('send', formation)" class="mt-4" :disabled="!isFormValid">
             Ajouter la formation
         </VBtn>
     </VForm>    
@@ -27,4 +27,6 @@
 import { ref } from 'vue';
 const isFormValid = ref(false)
 const formation = ref({})
+
+const emit = defineEmits(['send'])
 </script>

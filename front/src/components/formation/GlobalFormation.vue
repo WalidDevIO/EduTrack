@@ -12,10 +12,25 @@
                 </VContainer>
             </VCol>
         </VRow>
+        <VRow>
+            <VBtn @click="modal = true">Ajouter une formation</VBtn>
+        </VRow>
     </VContainer>
+    <VDialog v-model="modal">
+        <VSheet class="h-75 pa-5 rounded-lg" elevation="5">
+            <h1>Ajouter une formation</h1>
+            <FormationForm @send="formationSent"/>
+        </VSheet>
+    </VDialog> 
 </template>
 
 <script setup>
+import { ref } from 'vue';
 
+const modal = ref(false)
 
+const formationSent = (formation, p1,p2) => {
+    console.log(JSON.stringify(formation), p1, p2)
+    modal.value = false
+}
 </script>

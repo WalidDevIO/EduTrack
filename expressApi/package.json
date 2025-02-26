@@ -1,14 +1,14 @@
 {
-  "name": "expressApi",
+  "name": "coreapi",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Simulation API Core pour la démo dans le cas où les API des autres ne sont pas prête\nCette API intègre les API développés par notre groupe et implémente toutes les API nécessaire au fonctionnement de l'application",
+  "main": "coreApi.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "node coreApi.js"
   },
   "type": "module",
   "keywords": [],
-  "author": "",
+  "author": "EL OUAZIZI Walid",
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.2"

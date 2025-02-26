@@ -1,6 +1,13 @@
 package fr.elite.studentapi.services.impl;
 
-public class StudentServiceImpl extends StudentService {
+import java.util.List;
+import java.util.Optional;
+
+import fr.elite.studentapi.entities.Student;
+import fr.elite.studentapi.repositories.StudentRepository;
+import fr.elite.studentapi.services.StudentService;
+
+public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
 
     public StudentServiceImpl(StudentRepository studentRepository) {
@@ -13,7 +20,7 @@ public class StudentServiceImpl extends StudentService {
     }
 
     @Override
-    public Optional<Student> getStudentById(String id) {
+    public Optional<Student> getStudentById(Long id) {
         return studentRepository.findById(id);
     }
 
@@ -23,13 +30,13 @@ public class StudentServiceImpl extends StudentService {
     }
 
     @Override
-    public Student updateStudent(String id, Student updatedStudent) {
+    public Student updateStudent(Long id, Student updatedStudent) {
         updatedStudent.setId(id);
         return studentRepository.save(updatedStudent);
     }
 
     @Override
-    public void deleteStudent(String id) {
+    public void deleteStudent(Long id) {
         studentRepository.deleteById(id);
     }
 

@@ -1,4 +1,4 @@
-import { studentApi, accessApi } from '../apis'
+import { studentApi, accessApi } from '../apis.js'
 
 export const registerStudent = async (student, password) => {
     

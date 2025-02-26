@@ -1,5 +1,3 @@
-export default {
-    messageApi: "http://localhost:8085/api/messages",
-    studentApi: "http://localhost:8081/api/student",
-    accessApi: "http://localhost:8080/api/auth"
-}
+export const messageApi = "http://localhost:8085/api/messages";
+export const studentApi = "http://localhost:8081/api/student";
+export const accessApi = "http://localhost:8080/api/auth";

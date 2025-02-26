@@ -1,11 +1,11 @@
-import { messageApi } from "../apis"
+import { messageApi } from "../apis.js"
 
-export const sendMessage = async (message, student) => {
+export const sendMessage = async (text, student) => {
 
     const studentNumber = student.id
 
     const message = {
-        text: message,
+        text,
         student: studentNumber,
         readed: false
     }

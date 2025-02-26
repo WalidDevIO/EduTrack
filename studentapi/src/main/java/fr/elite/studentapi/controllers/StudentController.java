@@ -2,6 +2,8 @@ package fr.elite.studentapi.controllers;
 
 import fr.elite.studentapi.entities.Student;
 import fr.elite.studentapi.repositories.StudentRepository;
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class StudentController {
 
     // Récupérer un étudiant par ID
     @GetMapping("/{id}")
-    public Optional<Student> getStudentById(@PathVariable String id) {
+    public Optional<Student> getStudentById(@PathVariable Long id) {
         return studentRepository.findById(id);
     }
 
@@ -37,7 +39,7 @@ public class StudentController {
 
     // Mettre à jour un étudiant
     @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable String id,@Valid @RequestBody Student updatedStudent) {
+    public Student updateStudent(@PathVariable Long id, @Valid @RequestBody Student updatedStudent) {
         return studentRepository.findById(id)
                 .map(student -> {
                     student.setStudentNumber(updatedStudent.getStudentNumber());
@@ -56,7 +58,7 @@ public class StudentController {
 
     // Supprimer un étudiant
     @DeleteMapping("/{id}")
-    public void deleteStudent(@PathVariable String id) {
+    public void deleteStudent(@PathVariable Long id) {
         studentRepository.deleteById(id);
     }
 }

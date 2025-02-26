@@ -1,14 +1,16 @@
 import express from 'express';
+import cors from 'cors'
 import { registerStudent } from './actions/registerStudent.js';
 import { sendMessage } from './actions/sendMessage.js';
 
 const app = express();
 
+app.use(express.json())
+app.use(cors())
+
 app.listen(3000, () => {
     console.log("App listening on port 3000")
 })
-
-app.use(express.json())
 
 app.post('/registerStudent', async (req, res) => {
     const { student, password } = req.body

@@ -1,6 +1,6 @@
 <template>
     <v-card class="mx-auto message-card" max-width="400">
-      <v-toolbar color="orange lighten-1" dark>
+      <v-toolbar>
         <v-toolbar-title>Message Board</v-toolbar-title>
       </v-toolbar>
   
@@ -44,7 +44,7 @@
 }
 
 .message-item.unread {
-  background-color: #ffeb3b;
+  background-color: #e9e9e9;
 }
 
 .message-item:hover {

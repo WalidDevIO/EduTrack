@@ -1,4 +1,6 @@
 import express from 'express';
+import { registerStudent } from './actions/registerStudent';
+import { sendMessage } from './actions/sendMessage';
 
 const app = express();
 
@@ -8,34 +10,14 @@ app.listen(3000, () => {
 
 app.use(express.json())
 
-app.get('/infosEtu', async (req, res) => {
-
-    const authorizationHeader = req.headers.authorization
-    if(!authorizationHeader) {
-        res.status(403).send()
+app.post('/registerStudent', async (req, res) => {
+    const { student, password } = req.body
+    const res = registerStudent(student, password)
+    if(res) {
+        await sendMessage("Votre compte a bien été créé", res)
+        res.status(201).send()
     }
-
-    const authRes = await fetch('authapi/me', {
-        headers: {
-            "Authorization": authorizationHeader
-        }
+    else res.status(400).send({
+        detail: "Erreur lors de la création de l'étudiant"
     })
-    .then(r => r.json())
-    .then(json => {
-        if(json.ok) return json.studentNumber
-        else return null
-    })
-
-    if(!authRes){
-        res.status(403).send()
-    }
-
-    const infosEtudiant = fetch('apibaptiste/etudiants/' + authRes)
-    .then(r => r.json())
-
-    const infosPromo = fetch('apianneee/annee/' + infosEtudiant.academicYear)
-    .then(r => r.json())
-
-
-    res.send({...infosEtudiant, ...infosPromo}, 200)
 })

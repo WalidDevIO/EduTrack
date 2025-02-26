@@ -4,7 +4,10 @@ export const registerStudent = async (student, password) => {
     
     const createdStudent = await fetch(`${studentApi}`, {
         method: "POST",
-        body: JSON.stringify(student)
+        body: JSON.stringify(student),
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
     })
         .then(r => r.json())
         .then(data => data.id)
@@ -18,6 +21,9 @@ export const registerStudent = async (student, password) => {
             username: 'e'+createdStudent,
             password,
             student: createdStudent
-        })
+        }),
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
     }).then(r => r.ok ? createdStudent : false)
 }

@@ -1,12 +1,9 @@
 import { messageApi } from "../apis.js"
 
 export const sendMessage = async (text, student) => {
-
-    const studentNumber = student.id
-
     const message = {
         text,
-        student: studentNumber,
+        student,
         readed: false
     }
 

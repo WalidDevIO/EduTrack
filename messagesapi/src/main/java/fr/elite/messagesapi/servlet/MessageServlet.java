@@ -69,21 +69,22 @@ public class MessageServlet extends HttpServlet {
                 // Handle erreur 404
                 throw new APIException("Route inconnue", 404);
             }
+            
+            if(pathInfo.startsWith("/student/") && method == "GET") {
+                pathInfo = pathInfo.substring(9);
+                try {
+                    Integer studentNumber = Integer.parseInt(pathInfo);
+                    handleStudentNumberMapping(request, response, studentNumber);
+                    return;
+                } catch (Exception e) {}
+            }
+
             pathInfo = pathInfo.replace("/", "");
 
             //Partie nouveau message
             if(pathInfo.equals("post") && method == "POST") {
                 handleNewMessage(request, response);
                 return;
-            }
-
-            //Partie recupération message par numero étudiant
-            if(method == "GET") {
-                try {
-                    Integer studentNumber = Integer.parseInt(pathInfo);
-                    handleStudentNumberMapping(request, response, studentNumber);
-                    return;
-                } catch (Exception e) {}
             }
 
             handleMessageIdMapping(request, response, method, pathInfo);

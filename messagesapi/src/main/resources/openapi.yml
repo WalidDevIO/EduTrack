@@ -11,7 +11,7 @@ servers:
     description: Serveur de dev
 
 paths:
-  /messages/{student}:
+  /messages/student/{student}:
     get:
       summary: Get all messages for a student
       tags:

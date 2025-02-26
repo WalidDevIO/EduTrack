@@ -34,7 +34,7 @@
         });
       },
       fetchAllMessages() {
-        fetch('http://localhost:8085/api/messages/' + 220202)
+        fetch('http://localhost:8085/api/messages/student/' + 220202) // Remplacer 220202 par l'id de l'étudiant connecté
           .then(response => response.json())
           .then(data => {
             this.messages = data;

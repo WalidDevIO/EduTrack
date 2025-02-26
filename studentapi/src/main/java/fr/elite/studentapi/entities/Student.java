@@ -18,8 +18,9 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Le numéro étudiant est obligatoire")
-    private String studentNumber;
+    //Pas réellement besoin l'id peut faire office de numéro étudiant
+    /*@NotBlank(message = "Le numéro étudiant est obligatoire")
+    private String studentNumber;*/
 
     private boolean academicYearRegistered;
 

@@ -42,7 +42,7 @@ public class StudentController {
     public Student updateStudent(@PathVariable Long id, @Valid @RequestBody Student updatedStudent) {
         return studentRepository.findById(id)
                 .map(student -> {
-                    student.setStudentNumber(updatedStudent.getStudentNumber());
+                    //student.setStudentNumber(updatedStudent.getStudentNumber());
                     student.setAcademicYearRegistered(updatedStudent.isAcademicYearRegistered());
                     student.setCoursesId(updatedStudent.getCoursesId());
                     student.setAcademicYearId(updatedStudent.getAcademicYearId());

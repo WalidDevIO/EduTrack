@@ -1,7 +1,7 @@
 <template>
   <div class="message-container">
     <div class="message-list">
-      <ListeMessage @message-selected="handlerClick" :messages="messages" />
+      <ListeMessage :messages="messages" />
     </div>
     <div class="message-details">
       <DetailsMessage :messageSelected="messageSelected" />
@@ -9,10 +9,7 @@
   </div>
 </template>
   
-<script>
-  import ListeMessage from './ListeMessage.vue';
-  import DetailsMessage from './DetailsMessage.vue';
-  
+<script> 
   export default {
     data() {
         return {
@@ -21,7 +18,7 @@
         };
     },
     methods: {
-      handlerClick(item) {
+      /*handlerClick(item) {
         this.messageSelected = item;
         fetch('http://localhost:8085/api/messages/' + item.id, {
           method: "PUT",
@@ -39,11 +36,11 @@
           .then(data => {
             this.messages = data;
           });
-      }
+      }*/
     },
     // Récupère les messages lorsque l'on ouvre la page
     created() {
-        this.fetchAllMessages()
+        //this.fetchAllMessages()
     },
   };
 </script>

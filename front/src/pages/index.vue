@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import DataTableFormation from '@/components/formation/DataTableFormation.vue';
 import DataTableUe from '@/components/formation/DataTableUe.vue';
 

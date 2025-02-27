@@ -51,7 +51,7 @@ const props = defineProps({
         required: true
     },
     registerMode: {
-      type: String,
+      type: Boolean,
       default: false
     }
 })

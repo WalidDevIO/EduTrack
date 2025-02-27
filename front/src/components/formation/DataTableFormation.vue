@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 
 const formations = ref([])
 
@@ -33,6 +33,13 @@ const detailHeaders = [
         title: "Nombre d'UE optionnelles à choisir"
     }
 ]
+
+const props = defineProps({
+    detail: {
+        type: Boolean,
+        default: false
+    }
+})
 
 onMounted(() => {
     fetch('/formationsFake.json')

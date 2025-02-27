@@ -7,10 +7,8 @@
       <v-list two-line>
         <template v-for="message in messages" :key="message.id">
           <v-list-item @click="selectMessage(message)" class="message-item" :class="{ unread: !message.readed }">
-            <v-list-item-content>
-              <v-list-item-title v-if="!message.readed" class="font-weight-bold">{{ message.text }}</v-list-item-title>
-              <v-list-item-title v-else>{{ message.text }}</v-list-item-title>
-            </v-list-item-content>
+            <v-list-item-title v-if="!message.readed" class="font-weight-bold">{{ message.text }}</v-list-item-title>
+            <v-list-item-title v-else>{{ message.text }}</v-list-item-title>
           </v-list-item>
           <v-divider></v-divider>
         </template>

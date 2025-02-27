@@ -1,9 +1,9 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth';
 
-const { login, role } = useAuthStore()
+const authStore = useAuthStore()
 </script>
 
 <template>
-    <LoginForm :auth="login"/>
+    <LoginForm :auth="authStore.login"/>
 </template>

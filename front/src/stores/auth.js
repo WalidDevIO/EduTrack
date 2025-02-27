@@ -22,11 +22,15 @@ export const useAuthStore = defineStore('authStore', () => {
             return false
         })
 
+        console.log(result)
+
         if(result) {
             studentNumber.value = await api.get('/students/me')
                 .then(r => r.data.student.id)
                 .catch(err => err.response?.data.detail === "Vous êtes un administrateur" ? "admin" : undefined)
         }
+
+        console.log(studentNumber.value, role.value)
 
         return result
     }

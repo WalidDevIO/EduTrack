@@ -5,6 +5,7 @@ import { initDB } from './db/mongo.js';
 import { studentRouter } from './subapis/students.js';
 import { formationsRouter } from './subapis/formations.js';
 import { uesRouter } from './subapis/ues.js';
+import { authRouter } from './subapis/auth.js';
 
 await initDB()
 
@@ -17,6 +18,7 @@ const apiRouter = express.Router()
 apiRouter.use('/students', studentRouter)
 apiRouter.use('/formations', formationsRouter)
 apiRouter.use('/ues', uesRouter)
+apiRouter.use('/auth', authRouter)
 
 app.use('/api', apiRouter)
 app.listen(3000, () => {

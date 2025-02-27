@@ -51,7 +51,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public BasicResponse unregister(String username) {
+    public BasicResponse unregister(String token) {
+        String username = jwtUtil.getUsername(token);
+        jwtUtil.invalidateToken(token);
         accessRepository.deleteByUsername(username);
         return new BasicResponse("User unregistered successfully");
     }

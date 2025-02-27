@@ -11,7 +11,7 @@ public interface AuthService {
 
     TokenResponse login(AuthRequest request);
 
-    BasicResponse unregister(String username);
+    BasicResponse unregister(String token);
 
     BasicResponse resetPassword(String username, String newPassword);
 

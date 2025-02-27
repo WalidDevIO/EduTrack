@@ -30,8 +30,9 @@ public class AuthController {
     }
 
     @DeleteMapping("/unregister/{username}")
-    public ResponseEntity<BasicResponse> unregister(@PathVariable String username) {
-        return ResponseEntity.ok(authService.unregister(username));
+    public ResponseEntity<BasicResponse> unregister(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        return ResponseEntity.ok(authService.unregister(token));
     }
 
     @PutMapping("/reset-password/{username}")

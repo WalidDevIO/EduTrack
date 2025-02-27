@@ -33,7 +33,8 @@ export const registerStudent = async (req, res) => {
     if (result) {
         await sendMessage("Votre compte a bien été créé", result)
         res.status(201).send({
-            number: result
+            number: result,
+            username: `e${result}`
         })
     }
     else result.status(400).send({

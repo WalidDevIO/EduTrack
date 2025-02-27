@@ -3,7 +3,7 @@ package fr.elite.studentapi.controllers;
 import fr.elite.studentapi.entities.Student;
 import fr.elite.studentapi.repositories.StudentRepository;
 import jakarta.validation.Valid;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,25 +21,34 @@ public class StudentController {
 
     // Récupérer tous les étudiants
     @GetMapping
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public ResponseEntity<List<?>> getAllStudents() {
+        List<Student> students = studentRepository.findAll();
+        return ResponseEntity.ok(students); // 200 OK
+
     }
 
     // Récupérer un étudiant par ID
     @GetMapping("/{id}")
-    public Optional<Student> getStudentById(@PathVariable Long id) {
-        return studentRepository.findById(id);
+    public ResponseEntity<?> getStudentById(@PathVariable Long id) {
+        return studentRepository.findById(id)
+                .map(ResponseEntity::ok) // 200 OK si trouvé
+                .orElse(ResponseEntity.notFound().build()); // 404 Not Found si non trouvé
     }
 
     // Ajouter un nouvel étudiant
     @PostMapping
-    public Student createStudent(@RequestBody Student student) {
-        return studentRepository.save(student);
+    public ResponseEntity<?> createStudent(@RequestBody Student student) {
+        try{
+            Student createdStudent = studentRepository.save(student);
+            return ResponseEntity.status(201).body(createdStudent); // 201 Student créé
+        }catch (Exception e){
+            return ResponseEntity.status(500).build(); // 500 Internal Server Error
+        }
     }
 
     // Mettre à jour un étudiant
     @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable Long id, @Valid @RequestBody Student updatedStudent) {
+    public ResponseEntity<?> updateStudent(@PathVariable Long id, @Valid @RequestBody Student updatedStudent) {
         return studentRepository.findById(id)
                 .map(student -> {
                     //student.setStudentNumber(updatedStudent.getStudentNumber());
@@ -51,14 +60,21 @@ public class StudentController {
                     student.setAdress(updatedStudent.getAdress());
                     student.setPw(updatedStudent.getPw());
                     student.setDw(updatedStudent.getDw());
-                    return studentRepository.save(student);
+                    studentRepository.save(student);
+                    return ResponseEntity.ok(student); // 200 OK après mise à jour
                 })
-                .orElseThrow(() -> new RuntimeException("Étudiant non trouvé"));
+                .orElse(ResponseEntity.notFound().build()); // 404 Not Found si non trouvé
     }
 
     // Supprimer un étudiant
     @DeleteMapping("/{id}")
-    public void deleteStudent(@PathVariable Long id) {
-        studentRepository.deleteById(id);
+    public ResponseEntity<?> deleteStudent(@PathVariable Long id) {
+        Optional<Student> student = studentRepository.findById(id);
+        if (student.isPresent()) {
+            studentRepository.deleteById(id);
+            return ResponseEntity.noContent().build(); // 204 No Content après suppression
+        } else {
+            return ResponseEntity.notFound().build(); // 404 Not Found si non trouvé
+        }
     }
 }

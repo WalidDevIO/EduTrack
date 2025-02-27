@@ -1,8 +1,9 @@
 import express from 'express';
 import cors from 'cors'
 
-import { studentRouter } from './students';
-import { initDB } from './db/mongo';
+import { studentRouter } from './students.js';
+import { initDB } from './db/mongo.js';
+import { formationsRouter } from './formations.js';
 
 await initDB()
 
@@ -14,8 +15,7 @@ app.use(cors())
 const apiRouter = express.Router()
 
 apiRouter.use('/students', studentRouter)
-
-
+apiRouter.use('/formations', formationsRouter)
 
 
 app.use('/api', apiRouter)

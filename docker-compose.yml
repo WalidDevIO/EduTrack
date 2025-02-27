@@ -10,6 +10,8 @@ services:
     image: mongo:latest
     volumes:
       - si_proj_nosql:/data/db
+    ports:
+      - "27017:27017"
 
   authapi:
     build:

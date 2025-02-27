@@ -1,5 +1,5 @@
 import express from 'express'
-import { registerStudent } from './actions/registerStudent';
+import { registerStudent } from './routes/registerStudent.js';
 
 const router = express.Router()
 

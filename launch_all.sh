@@ -1,13 +1,9 @@
 #!/bin/bash
 
-cd messagesapi
-mvn clean tomcat7:redeploy
+mvn -f messagesapi/pom.xml clean tomcat7:redeploy
 
-cd ../authapi
-./gradlew clean bootJar
+./authapi/gradlew -p ./authapi/ clean bootJar
 
-cd ../studentapi
-./gradlew clean bootJar
+./studentapi/gradlew -p ./studentapi/ clean bootJar
 
-cd ..
 docker compose up --build

@@ -1,9 +1,10 @@
 import express from 'express';
 import cors from 'cors'
 
-import { studentRouter } from './students.js';
 import { initDB } from './db/mongo.js';
-import { formationsRouter } from './formations.js';
+import { studentRouter } from './subapis/students.js';
+import { formationsRouter } from './subapis/formations.js';
+import { uesRouter } from './subapis/ues.js';
 
 await initDB()
 
@@ -13,10 +14,9 @@ app.use(express.json())
 app.use(cors())
 
 const apiRouter = express.Router()
-
 apiRouter.use('/students', studentRouter)
 apiRouter.use('/formations', formationsRouter)
-
+apiRouter.use('/ues', uesRouter)
 
 app.use('/api', apiRouter)
 app.listen(3000, () => {

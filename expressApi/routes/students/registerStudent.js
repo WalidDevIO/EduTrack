@@ -1,5 +1,5 @@
-import { studentApi, accessApi } from '../apis.js'
-import { sendMessage } from './sendMessage.js'
+import { studentApi, accessApi } from '../../apis.js'
+import { sendMessage } from '../../actions/sendMessage.js'
 
 export const registerStudent = async (req, res) => {
 

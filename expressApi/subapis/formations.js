@@ -1,6 +1,6 @@
 import express from 'express'
-import { adminRoute, loggedRoute } from './routes/loggedRoute.js';
-import { createFormation, deleteFormation, deleteFormationById, getFormationById, getFormations, updateFormation } from './actions/formations.js';
+import { adminRoute, loggedRoute } from '../routes/protection/loggedRoute.js';
+import { createFormation, deleteFormationById, getFormationById, getFormations, updateFormation } from '../actions/formations.js';
 
 const router = express.Router()
 

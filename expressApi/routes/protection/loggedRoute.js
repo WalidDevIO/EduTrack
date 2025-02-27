@@ -1,4 +1,4 @@
-import { accessApi } from "../apis.js"
+import { accessApi } from "../../apis.js"
 
 /**
  * S'assure que un header Authorization est présent et valide sinon retourne une 403.

@@ -1,12 +1,4 @@
 services:
-  servlet:
-    image: walkloly/tomcat-si:latest
-    ports:
-      - "8085:8080"
-    depends_on:
-      - db
-      - mongodb
-
   db:
     image: mariadb:latest
     ports:
@@ -22,6 +14,34 @@ services:
       - "27017:27017"
     volumes:
       - si_proj_nosql:/data/db
+
+  authapi:
+    build:
+      context: ./authapi
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_ROOT_PASSWORD=root
+    depends_on:
+      - db
+
+  studentapi:
+    build: 
+      context: ./studentapi
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_ROOT_PASSWORD=root
+    depends_on:
+      - db
+
+  messageapi:
+    build: 
+      context: ./messagesapi
+    environment:
+      - DB_HOST=mongodb
+    depends_on:
+      - mongodb
 
 volumes:
   si_proj_nosql:

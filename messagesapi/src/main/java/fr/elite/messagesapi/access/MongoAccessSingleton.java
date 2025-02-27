@@ -23,8 +23,8 @@ public class MongoAccessSingleton {
         if (db == null) {
             CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
             CodecRegistry pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(), fromProviders(pojoCodecProvider));
-            
-            ConnectionString connectionString = new ConnectionString("mongodb://mongodb");
+            String dbHost = System.getenv("DB_HOST");
+            ConnectionString connectionString = new ConnectionString("mongodb://" + dbHost);
             MongoClient mongoClient = MongoClients.create(connectionString);
             db = mongoClient.getDatabase("main").withCodecRegistry(pojoCodecRegistry).getCollection("messages", Message.class);
         }

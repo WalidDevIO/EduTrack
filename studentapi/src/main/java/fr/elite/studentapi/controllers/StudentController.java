@@ -77,4 +77,18 @@ public class StudentController {
             return ResponseEntity.notFound().build(); // 404 Not Found si non trouvé
         }
     }
+
+    @PostMapping('/import-students')
+    public ResponseEntity<?> importStudent (@Valid @RequestBody List<Student> students){
+        if (students == null || students.isEmpty()) {
+            return ResponseEntity.badRequest().body("La liste d'étudiants est vide."); // 400 Bad Request
+        }
+    
+        try {
+            List<Student> createdStudents = studentRepository.saveAll(students);
+            return ResponseEntity.status(201).body(createdStudents); // 201 Created
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erreur lors de l'importation des étudiants : " + e.getMessage()); // 500 avec message
+        }
+    }
 }

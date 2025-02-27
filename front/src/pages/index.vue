@@ -1,6 +1,21 @@
 <script setup>
 import DataTableFormation from '@/components/formation/DataTableFormation.vue';
 import DataTableUe from '@/components/formation/DataTableUe.vue';
+import { useAuthStore } from '@/stores/auth';
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
+
+const { isLogged, role } = storeToRefs(useAuthStore())
+
+const router = useRouter()
+
+if(isLogged.value) {
+    if(role.value === "admin") {
+        router.push('/admin/dashboard')
+    } else {
+        router.push('/etudiant/dashboard/')
+    }
+}
 
 </script>
 

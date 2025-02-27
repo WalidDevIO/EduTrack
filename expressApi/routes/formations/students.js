@@ -7,7 +7,7 @@ export async function getStudents(req, res) {
 
     const formationId = parseInt(req.params.id)
 
-    const students = await fetch(`${studentApi}`).then(r => r.json()).then(data => data.filter(student => student.academicYearId === formationId))
+    const students = await fetch(`${studentApi}?formation=${formationId}`).then(r => r.json())
 
     res.send(students)
 }

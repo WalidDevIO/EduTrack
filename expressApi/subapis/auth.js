@@ -1,6 +1,6 @@
 import express from 'express'
-import { adminRoute, loggedRoute } from '../routes/protection/loggedRoute'
-import { accessApi } from '../apis'
+import { adminRoute, loggedRoute } from '../routes/protection/loggedRoute.js'
+import { accessApi } from '../apis.js'
 
 const router = express.Router()
 

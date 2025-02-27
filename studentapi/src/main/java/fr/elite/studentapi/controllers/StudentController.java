@@ -82,7 +82,7 @@ public class StudentController {
         }
     }
 
-    @PostMapping('/import-students')
+    @PostMapping("/import-students")
     public ResponseEntity<?> importStudent (@Valid @RequestBody List<Student> students){
         if (students == null || students.isEmpty()) {
             return ResponseEntity.badRequest().body("La liste d'étudiants est vide."); // 400 Bad Request

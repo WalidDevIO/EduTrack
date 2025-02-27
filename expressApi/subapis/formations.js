@@ -1,6 +1,10 @@
 import express from 'express'
 import { adminRoute, loggedRoute } from '../routes/protection/loggedRoute.js';
 import { createFormation, deleteFormationById, getFormationById, getFormations, updateFormation } from '../actions/formations.js';
+import { accept, deny } from '../routes/formations/accept_deny.js';
+import { getStudents } from '../routes/formations/students.js';
+import { groupsAttribution } from '../routes/formations/groupsAttribution.js';
+import { getUes } from '../routes/formations/getUes.js';
 
 const router = express.Router()
 
@@ -46,5 +50,15 @@ router.delete('/:id', async (req, res) => {
     await deleteFormationById(parseInt(req.params.id))
     res.status(204).send()
 })
+
+router.post('/:id/accept/:student', accept)
+
+router.post('/:id/deny/:student', deny)
+
+router.get('/students/:id', getStudents)
+
+router.post('/attribute-groups/:id', groupsAttribution)
+
+router.get('/:id/ues', getUes)
 
 export const formationsRouter = router;

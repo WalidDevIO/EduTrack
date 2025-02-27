@@ -49,6 +49,12 @@ services:
       - messageapi
       - studentapi
 
+  front:
+    build:
+      context: ./front
+    ports:
+      - "80:80"
+
 volumes:
   si_proj_nosql:
   si_proj_sql:

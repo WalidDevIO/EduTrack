@@ -21,10 +21,14 @@ public class StudentController {
 
     // Récupérer tous les étudiants
     @GetMapping
-    public ResponseEntity<List<?>> getAllStudents() {
-        List<Student> students = studentRepository.findAll();
+    public ResponseEntity<List<?>> getAllStudents(@RequestParam(required=false) Long formation) {
+        List<Student> students;
+        if(formation != null) {
+            students = studentRepository.findByAcademicYearId(formation);
+        } else {
+            students = studentRepository.findAll();
+        }
         return ResponseEntity.ok(students); // 200 OK
-
     }
 
     // Récupérer un étudiant par ID

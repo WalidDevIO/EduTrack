@@ -11,18 +11,16 @@ onMounted(async () => {
     //Arrivée sur l'app on check si l'user est co
     if(!authStore.isLogged) {
         //Si il ne l'est pas on vérifie via la méthode checkConnection
-        if(await authStore.checkConnection()) {
-            //C'est ok son token est valide on le redirige
-            loading.value = false
-            handleLogged()
+        const isTokenStoredValid = await authStore.checkConnection()
+        if(!isTokenStoredValid) {
+            //Token invalide donc => Redirection page de connexion
+            router.push('/login')
+            return
         }
-    } else {
-        //Il est connecté on le redirige
-        handleLogged()
     }
-    
-    //Toujours pas connecté on l'envoie vers login
-    if(!authStore.isLogged) router.push('/login')
+    //Redirection vers le bon endroit
+    handleLogged()
+    loading.value = false
 })
 
 const handleLogged = () => {

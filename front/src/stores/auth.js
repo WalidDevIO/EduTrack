@@ -38,6 +38,7 @@ export const useAuthStore = defineStore('authStore', () => {
     }
 
     const checkConnection = async () => {
+        if(!localStorage.getItem('token')) return false
         return await api.get('/students/me')
             .then(r => {
                 studentNumber.value = r.data.student.id

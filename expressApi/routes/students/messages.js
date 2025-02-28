@@ -5,9 +5,9 @@ export async function getMessages(req ,res) {
     const logged = await loggedRoute(req, res)
     if(!logged) return
 
-    const result = await fetch(`${messageApi}/student/${logged.studentNumber}`).then(r => r.ok ? r.data : false)
+    const result = await fetch(`${messageApi}/student/${logged.studentNumber}`).then(r => r.ok ? r.json() : false)
 
-    if(!result) {
+    if(result === false) {
         res.status(500).send({
             detail: "Erreur interne"
         })

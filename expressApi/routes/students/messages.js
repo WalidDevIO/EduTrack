@@ -5,9 +5,7 @@ export async function getMessages(req ,res) {
     const logged = await loggedRoute(req, res)
     if(!logged) return
 
-    const id = parseInt(req.params.id)
-
-    const result = await fetch(`${messageApi}/student/${id}`).then(r => r.ok ? r.data : false)
+    const result = await fetch(`${messageApi}/student/${logged.studentNumber}`).then(r => r.ok ? r.data : false)
 
     if(!result) {
         res.status(500).send({

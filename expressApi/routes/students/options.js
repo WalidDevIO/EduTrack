@@ -27,6 +27,8 @@ const treat = async (req, res, add) => {
         return
     }
 
+    //TODO: Pas possible de souscrire à une UE pas dans la formation
+
     //On récupère l'UE
     const ueId = parseInt(req.params.id)
     const ue = await getUEById(ueId)

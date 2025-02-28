@@ -1,23 +1,11 @@
 <template>
-    <v-card class="details-card" v-if="messageSelected">
-      <v-card-title class="headline">{{ messageSelected.text }}</v-card-title>
-      <v-card-text>
-        <p><strong>Lu:</strong> {{ messageSelected.readed ? "Oui" : "Non" }}</p>
-      </v-card-text>
+    <v-card class="h-100">
+      <VCardText>{{ message?.text ?? "" }}</VCardText>
     </v-card>
   </template>
   
-<script>
-    export default {
-        props: {
-            messageSelected: Object  // Reçoit le message en prop
-    }
-};
+<script setup>
+const props = defineProps({
+  message: Object,
+})
 </script>
-
-<style scoped>
-.details-card {
-  padding: 20px;
-  margin-top: 20px;
-}
-</style>

@@ -1,51 +1,49 @@
 <template>
-    <v-card class="mx-auto message-card" max-width="400">
-      <v-toolbar>
-        <v-toolbar-title>Message Board</v-toolbar-title>
-      </v-toolbar>
-  
-      <v-list two-line>
-        <template v-for="message in messages" :key="message.id">
-          <v-list-item @click="selectMessage(message)" class="message-item" :class="{ unread: !message.readed }">
-            <v-list-item-title v-if="!message.readed" class="font-weight-bold">{{ message.text }}</v-list-item-title>
-            <v-list-item-title v-else>{{ message.text }}</v-list-item-title>
-          </v-list-item>
-          <v-divider></v-divider>
-        </template>
-      </v-list>
-    </v-card>
+    <VCard class="h-100">
+        <v-toolbar>
+            <v-toolbar-title>Mes messages</v-toolbar-title>
+        </v-toolbar>
+
+        <VList two-line>
+            <template v-if="!messages.length">
+                <VListItem>
+                    Vous n'avez aucun message
+                </VListItem>
+            </template>
+            <template v-for="(message, idx) in messages" :key="message.id">
+                <VListItem @click="emit('select', message)" class="cursor-pointer message">
+                    <VRow class="pa-6">
+                        <VListItemTitle v-if="!message.readed" class="font-weight-bold">
+                            {{ message.text }}
+                        </VListItemTitle>
+                        <VListItemTitle v-else>
+                            {{ message.text }}
+                        </VListItemTitle>
+                        <VSpacer />
+                        <VBtn icon @click="emit('delete', message.id)">
+                            <VIcon color="red">mdi-delete</VIcon>
+                        </VBtn>
+                    </VRow>
+                </VListItem>
+                <v-divider v-if="idx !== messages.length - 1" color="#000000" opacity="0.4" />
+            </template>
+        </VList>
+    </VCard>
 </template>
 
-<script>
-    export default {
-    methods: {
-        selectMessage(item) {
-        this.$emit("message-selected", item); // Envoie le message cliqué au parent
-        }
-    },
-    props: {
-        messages: {
-            type: Array,
-            required: true
-        }
+<script setup>
+const props = defineProps({
+    messages: {
+        type: Array,
+        required: true
     }
-}
+})
+
+const emit = defineEmits(["select", "delete"])
 </script>
 
 <style scoped>
-.message-card {
-  margin-top: 20px;
-}
-
-.message-item {
-  cursor: pointer;
-}
-
-.message-item.unread {
-  background-color: #e9e9e9;
-}
-
-.message-item:hover {
-  background-color: #f5f5f5;
+.message:hover {
+    background-color: #f5f5f5;
 }
 </style>

@@ -10,7 +10,7 @@
         <VTextField v-model="password" type="password" placeholder="Mot de passe" :rules="[mandatoryFieldRule]"/>
         <VTextField v-if="registerMode" v-model="passwordConfirmation" type="password" placeholder="Confirmation du mot de passe" :rules="[mandatoryFieldRule, v => v === password || 'Les mots de passe ne correspondent pas!']"/>
         <VBtn @click="handleSubmit">{{ message }}</VBtn>
-        <h5 v-if="!registerMode">Pas de compte ? <a href="/register">S'inscrire</a></h5>
+        <h5 class="mt-4" v-if="!registerMode">Pas de compte ? <a href="/register">S'inscrire</a></h5>
       </VForm>
     </VSheet>
   </VContainer>

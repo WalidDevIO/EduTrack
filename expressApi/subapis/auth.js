@@ -5,7 +5,7 @@ import { accessApi } from '../apis.js'
 const router = express.Router()
 
 router.put('/reset-password/:username', async (req, res) => {
-    const logged = adminRoute(req, res)
+    const logged = await adminRoute(req, res)
     if(!logged) return
 
     const response = await fetch(`${accessApi}/reset-password/${req.params.username}`, {
@@ -28,7 +28,7 @@ router.put('/reset-password/:username', async (req, res) => {
 })
 
 router.delete('/unregister', async(req, res) => {
-    const logged = loggedRoute(req, res)
+    const logged = await loggedRoute(req, res)
     if (!logged) return
 
     const response = await fetch(`${accessApi}/unregister`, {
@@ -50,7 +50,7 @@ router.delete('/unregister', async(req, res) => {
 })
 
 router.delete('/logout', async (req, res) => {
-    const logged = loggedRoute(req, res)
+    const logged = await loggedRoute(req, res)
     if(!logged) return
 
     const response = await fetch(`${accessApi}/logout`, {

@@ -1,12 +1,6 @@
 <template>
     <Loader v-model="loading" />
-    <v-toolbar color="#0d0d0d">
-        <v-toolbar-title>Dashboard Etudiant</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon>
-            <v-icon color="white" @click="authStore.logout">mdi-export</v-icon>
-        </v-btn>
-    </v-toolbar>
+    <Navbar />
     <VContainer v-if="!loading">
         <VRow>
             <InfosEtudiant :infos="infos"/>
@@ -15,7 +9,7 @@
             <Message/>
         </VRow>
         <VRow>
-            <DataTableUe/>
+            <DataTableUe :ues="studentUes"/>
         </VRow>
     </VContainer>
 </template>
@@ -23,7 +17,7 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth';
 import { api } from '@/utils/axios';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const infos = ref()
@@ -31,11 +25,21 @@ const loading = ref(true)
 const authStore = useAuthStore()
 const router = useRouter()
 
+const ues = ref([])
+
+const studentUes = computed(() => ues.value.filter(ue => !ue.option || infos.value.student.coursesId?.includes(ue._id)))
+
 onMounted(async () => {
     if(authStore.role !== "student") {
-        router.push('/login')
+        router.push('/')
     }
     await api.get("/students/me").then(r => infos.value = r.data)
+    if(!infos.value.student.academicYearId) {
+        router.push('/etudiant/formations')
+        return
+    }
+
+    await api.get(`/formations/${infos.value.formation._id}/ues`).then(r => ues.value = r.data)
     loading.value = false
 })
 </script>

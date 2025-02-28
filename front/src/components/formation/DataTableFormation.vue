@@ -1,13 +1,17 @@
 <template>
-    <VDataTable :items="formations" :headers="headers">
-
-    </VDataTable>
+    <VSheet elevation="5" class="mt-6 h-75 pa-5 rounded-lg w-100">
+        <VContainer class="h-100">
+            <VDataTable class="h-100" :items="formations" :headers="headers">
+                <template v-slot:item.responsable="{item}">
+                    <a :href="`mailto:${item.mail}`">{{ item.responsable }}</a>
+                </template>
+            </VDataTable>
+        </VContainer>
+    </VSheet>
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue';
-
-const formations = ref([])
+import { computed } from 'vue';
 
 const headers = computed(() => props.detail ? detailHeaders : baseHeaders)
 
@@ -19,10 +23,6 @@ const baseHeaders = [
     {
         key: 'responsable',
         title: 'Responsable de la formation'
-    },
-    {
-        key: 'mail',
-        title: 'Email du responsable de la formation'
     },
 ]
 
@@ -38,12 +38,10 @@ const props = defineProps({
     detail: {
         type: Boolean,
         default: false
+    },
+    formations: {
+        type: Array,
+        default: () => []
     }
-})
-
-onMounted(() => {
-    fetch('/formationsFake.json')
-        .then(r => r.json())
-        .then(data => formations.value = data)
 })
 </script>

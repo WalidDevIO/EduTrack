@@ -4,7 +4,7 @@
 
         <VTextField v-model="formation.responsable" placeholder="Responsable de la formation" :rules="[v => !!v || 'Un reponsable de formation est requis !']"/>
 
-        <VTextField v-model="formation.mailresp" placeholder="Email du responsable de la formation" 
+        <VTextField v-model="formation.mail" placeholder="Email du responsable de la formation" 
             :rules="[
                 v => !!v || 'Un mail de responsable de formation est requis !',
                 v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'L\'adresse mail du reponsable doit être valide'

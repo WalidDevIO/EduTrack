@@ -3,21 +3,13 @@
 </template>
 
 <script setup>
+import { api } from '@/utils/axios';
+
     const register = (data) => {
-        fetch("http://localhost:3000/registerStudent", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
-        .then(r => {
-            if(r.ok) return r.json()
-            throw new Error()
-        })
-        .then(data => {
-            alert(JSON.stringify(data))
-        })
-        .catch(console.error)
+        api.post('/students/register', data)
+            .then(r => alert(r.data.username))
+            .catch(err => {
+                alert("Erreur")
+            })
     }
 </script>

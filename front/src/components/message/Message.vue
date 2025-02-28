@@ -1,7 +1,7 @@
 <template>
-  <div class="message-container">
+  <div class="message-container" v-if="messages">
     <div class="message-list">
-      <ListeMessage :messages="messages" />
+      <ListeMessage @message-selected="handleSelect" :messages="messages" />
     </div>
     <div class="message-details">
       <DetailsMessage :messageSelected="messageSelected" />
@@ -9,40 +9,20 @@
   </div>
 </template>
   
-<script> 
-  export default {
-    data() {
-        return {
-            messageSelected: null,
-            messages: []
-        };
-    },
-    methods: {
-      /*handlerClick(item) {
-        this.messageSelected = item;
-        fetch('http://localhost:8085/api/messages/' + item.id, {
-          method: "PUT",
-          body: JSON.stringify({...item, readed: true}),
-        })
-        .then(response => {
-          if(response.ok) {
-            this.messages.find(m => m.id === item.id).readed = true;
-          }
-        });
-      },
-      fetchAllMessages() {
-        fetch('http://localhost:8085/api/messages/student/' + 220202) // Remplacer 220202 par l'id de l'étudiant connecté
-          .then(response => response.json())
-          .then(data => {
-            this.messages = data;
-          });
-      }*/
-    },
-    // Récupère les messages lorsque l'on ouvre la page
-    created() {
-        //this.fetchAllMessages()
-    },
-  };
+<script setup>
+import { onMounted, ref } from 'vue';
+import { api } from '@/utils/axios';
+
+const messages = ref()
+const messageSelected = ref()
+ 
+const handleSelect = (message) => {
+  messageSelected.value = message
+}
+
+onMounted(() => {
+    api.get('/students/messages').then(r => messages.value = r.data).catch(console.error)
+})
 </script>
 
 <style scoped>

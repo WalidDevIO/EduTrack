@@ -11,12 +11,10 @@
             <InfosEtudiant />
         </VRow>
         <VRow>
-            <VCol><Message /></VCol>
-            <VCol><DataTableUe/></VCol>
+            <Message/>
+        </VRow>
+        <VRow>
+            <DataTableUe/>
         </VRow>
     </VContainer>
 </template>
-
-<script setup>
-
-</script>

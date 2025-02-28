@@ -7,7 +7,7 @@ export const useAuthStore = defineStore('authStore', () => {
 
     onMounted(() => {
         if(localStorage.getItem('token')) {
-
+            checkConnection()
         }
     })
 
@@ -31,16 +31,25 @@ export const useAuthStore = defineStore('authStore', () => {
         })
 
         if(result) {
-            studentNumber.value = await api.get('/students/me')
-                .then(r => r.data.student.id)
-                .catch(err => err.response?.data.detail === "Vous êtes un administrateur" ? "admin" : undefined)
+            await checkConnection()
         }
 
         return result
     }
 
     const checkConnection = async () => {
-        
+        return await api.get('/students/me')
+            .then(r => {
+                studentNumber.value = r.data.student.id
+                isLogged.value = true
+                return true
+            })
+            .catch(err => {
+                if(err.response?.status === 403) return false
+                studentNumber.value = err.response?.data.detail === "Vous êtes un administrateur" ? "admin" : undefined
+                isLogged.value = true
+                return true
+            })
     }
 
     const logout = async () => {
@@ -55,7 +64,8 @@ export const useAuthStore = defineStore('authStore', () => {
         studentNumber,
         role,
         login,
-        logout
+        logout,
+        checkConnection
     }
 
 })

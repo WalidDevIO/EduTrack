@@ -1,5 +1,5 @@
 <template>
-    <VSheet elevation="5" class="mt-6 h-75 pa-5 rounded-lg w-100">
+    <VSheet elevation="5" class="mt-6 pa-5 rounded-lg w-100">
         <VContainer v-if="messages">
             <VRow>
                 <VCol>

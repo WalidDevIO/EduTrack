@@ -3,13 +3,15 @@
     <Loader v-model="loading"/>
     <VContainer v-if="!loading" class="h-100">
         <VRow class="h-100">
-            <DataTableFormation :formations="formations" :headers="headers">
+            <DataTableFormation :formations="formations" :headers="headers" title="Formations disponibles">
                 <template v-slot:actions="{item}">
-                    <VBtn @click="handleSubscribe(item)">Rejoindre</VBtn>
+                    <VBtn @click="handleSubscribe(item)">Demander à rejoindre</VBtn>
                 </template>
             </DataTableFormation>
         </VRow>
     </VContainer>
+
+    <Snackbar v-model="showSnackbar" :text="error"/>
 </template>
 
 <script setup>
@@ -23,13 +25,16 @@ const router = useRouter()
 const authStore = useAuthStore()
 const formations = ref([])
 
+const error = ref()
+const showSnackbar = ref(false)
+
 const handleSubscribe = async (item) => {
-    const result = await api.post(`/students/subscribe/${item._id}`).then(r => r.data).catch(err => false)
+    const result = await api.post(`/students/subscribe/${item._id}`).then(r => r.data).catch(err => err.response?.data.detail)
     if(result) {
         router.push('/etudiants/dashboard')
     } else {
-        //TODO: Belle affichage erreur
-        alert('Erreur')
+        error.value = result
+        showSnackbar.value = true
     }
 }
 

@@ -9,7 +9,7 @@
             <Message/>
         </VRow>
         <VRow>
-            <DataTableUe :ues="studentUes"/>
+            <DataTableUe :ues="studentUes" title="Mes enseignements" :headers="uesHeaders"/>
         </VRow>
     </VContainer>
 </template>
@@ -28,6 +28,21 @@ const router = useRouter()
 const ues = ref([])
 
 const studentUes = computed(() => ues.value.filter(ue => !ue.option || infos.value.student.coursesId?.includes(ue._id)))
+
+const uesHeaders = [
+    {
+        key: 'nom',
+        title: 'Nom de l\' UE'
+    },
+    {
+        key: 'responsable',
+        title: 'Responsable de l\'UE'
+    },
+    {
+        key: 'option',
+        title: 'Optionnelle ?'
+    }
+]
 
 onMounted(async () => {
     if(authStore.role !== "student") router.push('/')

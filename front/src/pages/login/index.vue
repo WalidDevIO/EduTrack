@@ -11,12 +11,12 @@ const handleLogin = async (credentials) => {
         if(authStore.role === "admin") {
             router.push('/admin/dashboard')
         } else {
-            router.push('/etudiant/dashboard/')
+            router.push('/etudiants/dashboard/')
         }
     }
 }
 </script>
 
 <template>
-    <LoginForm :auth="handleLogin"/>
+    <AuthForm :auth="handleLogin"/>
 </template>

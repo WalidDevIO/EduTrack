@@ -1,5 +1,5 @@
 <template>
-    <LoginForm :auth="register" :registerMode="true"/>
+    <AuthForm :auth="register" :registerMode="true"/>
 </template>
 
 <script setup>

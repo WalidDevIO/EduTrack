@@ -30,12 +30,10 @@ const ues = ref([])
 const studentUes = computed(() => ues.value.filter(ue => !ue.option || infos.value.student.coursesId?.includes(ue._id)))
 
 onMounted(async () => {
-    if(authStore.role !== "student") {
-        router.push('/')
-    }
+    if(authStore.role !== "student") router.push('/')
     await api.get("/students/me").then(r => infos.value = r.data)
     if(!infos.value.student.academicYearId) {
-        router.push('/etudiant/formations')
+        router.push('/etudiants/formations')
         return
     }
 

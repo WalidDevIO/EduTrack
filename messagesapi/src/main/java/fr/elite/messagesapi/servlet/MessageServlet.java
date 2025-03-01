@@ -66,7 +66,6 @@ public class MessageServlet extends HttpServlet {
             // Récupérer le pathInfo qui est la partie de l'URL après le nom de la servlet
             String pathInfo = request.getPathInfo();
             if (pathInfo == null || pathInfo.isEmpty()) {
-                // Handle erreur 404
                 throw new APIException("Route inconnue", 404);
             }
             
@@ -82,7 +81,7 @@ public class MessageServlet extends HttpServlet {
             pathInfo = pathInfo.replace("/", "");
 
             //Partie nouveau message
-            if(pathInfo.equals("post") && method == "POST") {
+            if(pathInfo.isEmpty() && method == "POST") {
                 handleNewMessage(request, response);
                 return;
             }
@@ -113,7 +112,7 @@ public class MessageServlet extends HttpServlet {
         try {
             oid = new ObjectId(id);
         } catch(IllegalArgumentException e) {
-            throw new APIException("Route inconnue", 404);
+            throw new APIException("ID invalide", 400);
         }
 
         if(method.equals("DELETE")) {

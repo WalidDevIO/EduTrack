@@ -4,13 +4,13 @@
             <h3>UEs</h3>
         </VExpansionPanelTitle>
         <VExpansionPanelText>
-            <DataTableUe :ues="ues" title="Les Unités d'Enseignements" :headers="adminUesHeaders">
+            <DataTable :items="ues" title="Les Unités d'Enseignements" :headers="adminUesHeaders" no-data-text="Aucune UEs disponible">
                 <template v-slot:actions="{item}">
                     <VBtn>
                         Éditer
                     </VBtn>
                 </template>
-            </DataTableUe>
+            </DataTable>
             <VContainer class="d-flex justify-end">
                 <VBtn prepend-icon="mdi-plus" @click="showDialog = true">
                     Ajouter une UE

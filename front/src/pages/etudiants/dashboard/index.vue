@@ -9,7 +9,7 @@
             <Message/>
         </VRow>
         <VRow>
-            <DataTableUe :ues="studentUes" title="Mes enseignements" :headers="uesHeaders"/>
+            <DataTable :items="studentUes" title="Mes enseignements" :headers="uesHeaders" no-data-text="Aucune UEs suivies"/>
         </VRow>
     </VContainer>
 </template>

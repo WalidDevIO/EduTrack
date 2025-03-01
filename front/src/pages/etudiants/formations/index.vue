@@ -3,11 +3,11 @@
     <Loader v-model="loading"/>
     <VContainer v-if="!loading" class="h-100">
         <VRow class="h-100">
-            <DataTableFormation :formations="formations" :headers="headers" title="Formations disponibles">
+            <DataTable :items="formations" :headers="headers" title="Formations disponibles" no-data-text="Aucune formation disponible">
                 <template v-slot:actions="{item}">
                     <VBtn @click="handleSubscribe(item)">Demander à rejoindre</VBtn>
                 </template>
-            </DataTableFormation>
+            </DataTable>
         </VRow>
     </VContainer>
 

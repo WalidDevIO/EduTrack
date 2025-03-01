@@ -4,13 +4,13 @@
             <h3>Formations</h3>
         </VExpansionPanelTitle>
         <VExpansionPanelText>
-            <DataTableFormation :formations="formations" title="Les Formations" :headers="adminFormationsHeaders">
+            <DataTable :items="formations" title="Les Formations" :headers="adminFormationsHeaders" no-data-text="Aucune formation disponible">
                 <template v-slot:actions="{item}">
                     <VBtn>
                         Éditer
                     </VBtn>
                 </template>
-            </DataTableFormation>
+            </DataTable>
             <VContainer class="d-flex justify-end">
                 <VBtn prepend-icon="mdi-plus" @click="showDialog = true">
                     Ajouter une Formation

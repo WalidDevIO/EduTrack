@@ -25,7 +25,7 @@ onMounted(async () => {
 
 const handleLogged = () => {
     if(authStore.role === "admin") router.push('/admin/dashboard')
-    else router.push('/etudiant/dashboard')
+    else router.push('/etudiants/dashboard')
 }
 
 </script>

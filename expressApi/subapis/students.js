@@ -5,6 +5,8 @@ import { subscribeFormation } from '../routes/students/subscribeFormation.js';
 import { changeGroups } from '../routes/students/changeGroups.js';
 import { subscribe, unsubscribe } from '../routes/students/options.js';
 import { deleteMessage, getMessages, readMessage } from '../routes/students/messages.js';
+import { adminRoute } from '../routes/protection/loggedRoute.js';
+import { studentApi } from '../apis.js';
 
 const router = express.Router()
 
@@ -17,5 +19,11 @@ router.post('/ues/unsubscribe/:id', unsubscribe)
 router.get('/messages', getMessages)
 router.put('/messages/read', readMessage)
 router.delete('/messages/:id', deleteMessage)
+router.get('/', async (req, res) => {
+    const logged = await adminRoute(req, res)
+    if(!logged) return;
+
+    await fetch(`${studentApi}`).then(r => r.json()).then(data => res.send(data)).catch(() => res.status(500).send({detail: "Erreur interne"}))
+})
 
 export const studentRouter = router;

@@ -1,5 +1,6 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth';
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore()
@@ -15,6 +16,10 @@ const handleLogin = async (credentials) => {
         }
     }
 }
+
+onMounted(() => {
+    if(authStore.isLogged) router.push('/')
+})
 </script>
 
 <template>

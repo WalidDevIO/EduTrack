@@ -1,26 +1,50 @@
 <template>
     <VContainer>
-        <VSheet elevation="5" class="h-75 pa-5 rounded-lg">
-            <h1 class="mb-6">Espace d'administration</h1>
-            <VTabs v-model="selectedTab" grow>
-                <VTab value="formationsGestion">Gestion des formations</VTab>
-                <VTab value="formationGestion">Gestion d'une formation</VTab>
-            </VTabs>
-            <VTabsWindow v-model="selectedTab">
-                <VTabsWindowItem value="formationsGestion">
-                    <GlobalFormation/>
-                </VTabsWindowItem>
-                <VTabsWindowItem value="formationGestion">
-                    Detail formation
-                </VTabsWindowItem>
-            </VTabsWindow>
+        <h1 class="mb-6">Espace d'administration</h1>
+        <VSheet elevation="5" class="pa-5 rounded-lg">
+            <h3 class="mb-6">Gestion UEs et formations</h3>
+            <VExpansionPanels>
+                <UeExpansionPanel
+                    @new="ues.push"
+                    :ues="ues"
+                />
+                <FormationExpansionPanel
+                    @new="formations.push"
+                    :formations="formations"
+                    :ues="ues"
+                />
+            </VExpansionPanels>
         </VSheet>
+        
+        <VSheet elevation="5" class="pa-5 rounded-lg mt-6">
+            <h3 class="mb-6">Gestion Étudiants</h3>
+            <DataTableEtudiant title="Les étudiants" :students="students" :headers="adminStudentHeaders(formations)">
+                <template v-slot:actions="{item}">
+                    <VContainer>
+                        <VBtn class="mr-2" color="orange" @click="console.warn('TODO')">
+                            Reset mot de passe
+                        </VBtn>
+                    </VContainer>
+                </template>
+            </DataTableEtudiant>
+        </VSheet>
+
     </VContainer>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { api } from '@/utils/axios';
+import { onMounted, ref } from 'vue';
+import { adminStudentHeaders } from '@/utils/dataTableHeaders';
 
-const selectedTab = ref('formationsGestion')
+const ues = ref([])
+const formations = ref([])
+const students = ref([])
+
+onMounted(() => {
+    api.get('/ues').then(r => ues.value = r.data)
+    api.get('/students').then(r => students.value = r.data)
+    api.get('/formations').then(r => formations.value = r.data)
+})
 
 </script>

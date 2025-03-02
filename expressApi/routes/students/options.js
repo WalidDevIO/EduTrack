@@ -2,6 +2,7 @@ import { getUEById } from "../../actions/ues.js"
 import { studentApi } from "../../apis.js"
 import { loggedRoute } from "../protection/loggedRoute.js"
 import { sendMessage } from "../../actions/sendMessage.js"
+import { getFormationById } from "../../actions/formations.js"
 
 export const subscribe = async (req, res) => {
     await treat(req, res, true)
@@ -28,10 +29,31 @@ const treat = async (req, res, add) => {
         return
     }
 
-    //TODO: Pas possible de souscrire à une UE pas dans la formation
+    const ueId = parseInt(req.params.id)
+
+    const formation = await getFormationById(student.academicYearId ?? -1)
+    if(!formation) {
+        res.status(400).send({
+            detail: "Vous ne faites partie d'aucune formation"
+        })
+        return
+    }
+
+    if (!student.academicYearRegistered) {
+        res.status(400).send({
+            detail: "Vous n'avez pas encore été accepté dans la formation"
+        })
+        return
+    }
+
+    if(!formation.ues.includes(ueId)) {
+        res.status(400).send({
+            detail: "L'UE ne fait pas partie de la formation"
+        })
+        return
+    }
 
     //On récupère l'UE
-    const ueId = parseInt(req.params.id)
     const ue = await getUEById(ueId)
 
     //On check que c'est bien une option

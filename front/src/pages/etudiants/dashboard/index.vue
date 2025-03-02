@@ -5,13 +5,13 @@
         <VRow>
             <InfosEtudiant :infos="infos"/>
         </VRow>
-        <VRow v-if="infos.formation">
+        <VRow v-if="infos.student.academicYearRegistered">
             <OptionsSelector :infos="infos" :ues="ues" @subscribe="handleOptions" @unsubscribe="id => handleOptions(id, false)" :text="optionsTextProps"/>
         </VRow>
         <VRow>
             <Message/>
         </VRow>
-        <VRow>
+        <VRow v-if="infos.student.academicYearRegistered">
             <DataTable :items="studentUes" title="Mes enseignements" :headers="studentUesHeaders" no-data-text="Aucune UEs suivies"/>
         </VRow>
     </VContainer>

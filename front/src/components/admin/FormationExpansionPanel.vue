@@ -6,8 +6,8 @@
         <VExpansionPanelText>
             <DataTable :items="formations" title="Les Formations" :headers="adminFormationsHeaders" no-data-text="Aucune formation disponible">
                 <template v-slot:actions="{item}">
-                    <VBtn>
-                        Éditer
+                    <VBtn @click="router.push(`/admin/formations/${item._id}`)">
+                        Consulter
                     </VBtn>
                 </template>
             </DataTable>
@@ -23,7 +23,7 @@
         <VContainer>
             <VSheet elevation="5" class="pa-5 rounded-lg">
                 <h1 class="mb-2">Ajouter une Formation"</h1>
-                <FormationForm v-model="formation" @send="saveFormation" :ues="ues" btnText="Créer la formation"/>
+                <FormationForm title="Créer une formation" v-model="formation" @send="saveFormation" :ues="ues" btnText="Créer la formation"/>
             </VSheet>
         </VContainer>
     </VDialog>
@@ -35,11 +35,13 @@
 import { ref } from 'vue';
 import { adminFormationsHeaders } from '@/utils/dataTableHeaders';
 import { api } from '@/utils/axios';
+import { useRouter } from 'vue-router';
 
 const showDialog = ref(false)
 const formation = ref({})
 const showSnackbar = ref(false)
 const text = ref('')
+const router = useRouter()
 
 const props = defineProps({
     formations: {

@@ -5,6 +5,12 @@ services:
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - si_proj_sql:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mariadb", "-h", "localhost", "-uroot", "-proot", "-e", "USE auth; SELECT COUNT(*) FROM access;"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   mongodb:
     image: mongo:latest
@@ -19,7 +25,8 @@ services:
       - DB_PORT=3306
       - DB_ROOT_PASSWORD=root
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   studentapi:
     build: 
@@ -29,7 +36,8 @@ services:
       - DB_PORT=3306
       - DB_ROOT_PASSWORD=root
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   messageapi:
     build: 

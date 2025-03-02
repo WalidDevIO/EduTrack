@@ -4,4 +4,6 @@ WORKDIR /app
 
 COPY . /app
 
-ENTRYPOINT [ "npm", "run", "dev" ]
+RUN npm run build && npm i -g serve
+
+ENTRYPOINT ["serve", "-s", "dist", "-l", "3000"]

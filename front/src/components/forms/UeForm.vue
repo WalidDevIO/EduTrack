@@ -20,7 +20,7 @@
             </template>
 
             <VBtn @click.prevent="emit('send')" class="mt-4" :disabled="!isFormValid">
-                Ajouter l'UE
+                {{ btnText }}
             </VBtn>
         </VForm>
     </VSheet>   
@@ -30,6 +30,13 @@
 import { ref, watch } from 'vue';
 const isFormValid = ref(false)
 const ue = defineModel()
+
+const props = defineProps({
+    btnText: {
+        type: String,
+        required: true
+    }
+})
 
 const emit = defineEmits(['send'])
 

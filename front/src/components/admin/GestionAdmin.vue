@@ -5,6 +5,7 @@
             <h3 class="mb-6">Gestion UEs et formations</h3>
             <VExpansionPanels>
                 <UeExpansionPanel
+                    @edit="editUe"
                     @new="addUe"
                     :ues="ues"
                 />
@@ -43,6 +44,10 @@ const students = ref([])
 
 const addUe = (ue) => ues.value = [...ues.value, ue]
 const addFormation = (formation) => [...formations.value, formation]
+const editUe = (ue) => { 
+    const index = ues.value.findIndex(i => i._id == ue._id)
+    ues.value[index] = { ...ues.value[index], ...ue }
+}
 
 onMounted(() => {
     api.get('/ues').then(r => ues.value = r.data)

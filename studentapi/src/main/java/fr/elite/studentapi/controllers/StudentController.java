@@ -1,8 +1,10 @@
 package fr.elite.studentapi.controllers;
 
 import fr.elite.studentapi.entities.Student;
-import fr.elite.studentapi.repositories.StudentRepository;
+import fr.elite.studentapi.services.StudentService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,23 +12,20 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/students")
 public class StudentController {
 
-    private final StudentRepository studentRepository;
-
-    public StudentController(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
-    }
+    private final StudentService studentService;
 
     // Récupérer tous les étudiants
     @GetMapping
-    public ResponseEntity<List<?>> getAllStudents(@RequestParam(required=false) Long formation) {
+    public ResponseEntity<List<Student>> getAllStudents(@RequestParam(required=false) Long formation) {
         List<Student> students;
         if(formation != null) {
-            students = studentRepository.findByAcademicYearId(formation);
+            students = studentService.getStudentsByAcademicYear(formation);
         } else {
-            students = studentRepository.findAll();
+            students = studentService.getAllStudents();
         }
         return ResponseEntity.ok(students); // 200 OK
     }
@@ -34,7 +33,7 @@ public class StudentController {
     // Récupérer un étudiant par ID
     @GetMapping("/{id}")
     public ResponseEntity<?> getStudentById(@PathVariable Long id) {
-        return studentRepository.findById(id)
+        return studentService.getStudentById(id)
                 .map(ResponseEntity::ok) // 200 OK si trouvé
                 .orElse(ResponseEntity.notFound().build()); // 404 Not Found si non trouvé
     }
@@ -43,7 +42,7 @@ public class StudentController {
     @PostMapping
     public ResponseEntity<?> createStudent(@RequestBody Student student) {
         try{
-            Student createdStudent = studentRepository.save(student);
+            Student createdStudent = studentService.createStudent(student);
             return ResponseEntity.status(201).body(createdStudent); // 201 Student créé
         }catch (Exception e){
             return ResponseEntity.status(500).build(); // 500 Internal Server Error
@@ -53,29 +52,20 @@ public class StudentController {
     // Mettre à jour un étudiant
     @PutMapping("/{id}")
     public ResponseEntity<?> updateStudent(@PathVariable Long id, @Valid @RequestBody Student updatedStudent) {
-        return studentRepository.findById(id)
-                .map(student -> {
-                    //student.setStudentNumber(updatedStudent.getStudentNumber());
-                    student.setAcademicYearRegistered(updatedStudent.isAcademicYearRegistered());
-                    student.setCoursesId(updatedStudent.getCoursesId());
-                    student.setAcademicYearId(updatedStudent.getAcademicYearId());
-                    student.setSurname(updatedStudent.getSurname());
-                    student.setFirstname(updatedStudent.getFirstname());
-                    student.setAdress(updatedStudent.getAdress());
-                    student.setPw(updatedStudent.getPw());
-                    student.setDw(updatedStudent.getDw());
-                    studentRepository.save(student);
-                    return ResponseEntity.ok(student); // 200 OK après mise à jour
-                })
-                .orElse(ResponseEntity.notFound().build()); // 404 Not Found si non trouvé
+        Student updated = studentService.updateStudent(id, updatedStudent);
+        if(updated == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(updated);
+        }
     }
 
     // Supprimer un étudiant
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteStudent(@PathVariable Long id) {
-        Optional<Student> student = studentRepository.findById(id);
+        Optional<Student> student = studentService.getStudentById(id);
         if (student.isPresent()) {
-            studentRepository.deleteById(id);
+            studentService.deleteStudent(id);
             return ResponseEntity.noContent().build(); // 204 No Content après suppression
         } else {
             return ResponseEntity.notFound().build(); // 404 Not Found si non trouvé
@@ -89,7 +79,7 @@ public class StudentController {
         }
     
         try {
-            List<Student> createdStudents = studentRepository.saveAll(students);
+            List<Student> createdStudents = studentService.createAll(students);
             return ResponseEntity.status(201).body(createdStudents); // 201 Created
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Erreur lors de l'importation des étudiants : " + e.getMessage()); // 500 avec message

@@ -5,11 +5,11 @@
             <h3 class="mb-6">Gestion UEs et formations</h3>
             <VExpansionPanels>
                 <UeExpansionPanel
-                    @new="ues.push"
+                    @new="addUe"
                     :ues="ues"
                 />
                 <FormationExpansionPanel
-                    @new="formations.push"
+                    @new="addFormation"
                     :formations="formations"
                     :ues="ues"
                 />
@@ -40,6 +40,9 @@ import { adminStudentHeaders } from '@/utils/dataTableHeaders';
 const ues = ref([])
 const formations = ref([])
 const students = ref([])
+
+const addUe = (ue) => ues.value = [...ues.value, ue]
+const addFormation = (formation) => [...formations.value, formation]
 
 onMounted(() => {
     api.get('/ues').then(r => ues.value = r.data)

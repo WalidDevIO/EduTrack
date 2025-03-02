@@ -19,7 +19,7 @@
         </VExpansionPanelText>
     </VExpansionPanel>
 
-    <VDialog v-model="showDialog" v-if="showDialog">
+    <VDialog v-model="showDialog">
         <VContainer>
             <VSheet elevation="5" class="pa-5 rounded-lg">
                 <h1 class="mb-2">Ajouter une Unité d'Enseignement</h1>
@@ -54,9 +54,9 @@ const saveUe = async () => {
     api.post('/ues/', ue.value)
         .then(r => {
             if(r.status === 201) {
+                showDialog.value = false
                 emit('new', ue.value)
                 ue.value = {}
-                showDialog.value = false
             } 
         })
         .catch(err => {

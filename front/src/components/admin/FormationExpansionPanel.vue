@@ -19,7 +19,7 @@
         </VExpansionPanelText>
     </VExpansionPanel>
 
-    <VDialog v-model="showDialog" v-if="showDialog">
+    <VDialog v-model="showDialog">
         <VContainer>
             <VSheet elevation="5" class="pa-5 rounded-lg">
                 <h1 class="mb-2">Ajouter une Formation"</h1>
@@ -60,9 +60,9 @@ const saveFormation = () => {
     api.post('/formations/', formation.value)
         .then(r => {
             if(r.status === 201) {
+                showDialog.value = false
                 emit('new', formation.value)
                 formation.value = {}
-                showDialog.value = false
             } 
         })
         .catch(err => {

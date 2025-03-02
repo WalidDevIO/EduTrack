@@ -5,11 +5,11 @@
         <VRow>
             <InfosEtudiant :infos="infos"/>
         </VRow>
+        <VRow v-if="infos.formation">
+            <OptionsSelector :infos="infos" :ues="ues" @subscribe="handleOptions" @unsubscribe="id => handleOptions(id, false)" :text="optionsTextProps"/>
+        </VRow>
         <VRow>
             <Message/>
-        </VRow>
-        <VRow v-if="infos.formation">
-            <OptionsSelector :infos="infos" :ues="ues" @send="" :text="optionsTextProps"/>
         </VRow>
         <VRow>
             <DataTable :items="studentUes" title="Mes enseignements" :headers="studentUesHeaders" no-data-text="Aucune UEs suivies"/>
@@ -39,6 +39,14 @@ const optionsTextProps = computed(() => infos.value.student.coursesId.length < i
     text: "Gérer vos options",
     color: "black"
 })
+
+const handleOptions = async (id, add = true) => {
+    const ok = await api.post(`/students/ues/${add ? 'subscribe' : 'unsubscribe'}/${id}`).then(() => true).catch(() => false)
+    if(ok) {
+        if(add) infos.value.student.coursesId.push(id)
+        else infos.value.student.coursesId = infos.value.student.coursesId.filter(ueId => ueId != id)
+    }
+}
 
 onMounted(async () => {
     if(authStore.role !== "student") router.push('/')

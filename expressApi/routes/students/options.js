@@ -1,6 +1,7 @@
 import { getUEById } from "../../actions/ues.js"
 import { studentApi } from "../../apis.js"
 import { loggedRoute } from "../protection/loggedRoute.js"
+import { sendMessage } from "../../actions/sendMessage.js"
 
 export const subscribe = async (req, res) => {
     await treat(req, res, true)
@@ -50,7 +51,7 @@ const treat = async (req, res, add) => {
 
     //Ignorer cette opération si l'étudiant compte unsubscribe à l'option (Vérifie qu'il reste de la place dans l'option)
     const count = add ? students.filter(student => student.coursesId?.includes(ueId)).length : 0
-    if(add && ue.capacite !== -1 && count > ue.capacite) {
+    if(add && ue.capacite != -1 && count > ue.capacite) {
         res.status(400).send({
             detail: "L'UE n'a plus de place pour de nouveaux inscrits"
         })
@@ -77,6 +78,7 @@ const treat = async (req, res, add) => {
         res.send({
             detail: "Opération réussie"
         })
+        sendMessage(`Vous vous êtes ${add ? 'inscrit à' : 'désinscrit de'} l'UE ${ue.nom}.`, student.id)
     } else {
         //Erreur dans l'API Etudiant
         res.status(500).send({

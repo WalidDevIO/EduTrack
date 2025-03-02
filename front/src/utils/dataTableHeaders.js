@@ -92,3 +92,18 @@ export const adminUesHeaders = [
         width: '10%'
     }
 ]
+
+export const studentUesHeaders = [
+    {
+        key: 'nom',
+        title: 'Nom de l\' UE'
+    },
+    {
+        key: 'responsable',
+        title: 'Responsable de l\'UE'
+    },
+    {
+        key: 'option',
+        title: 'Optionnelle ?'
+    }
+]

@@ -8,8 +8,11 @@
         <VRow>
             <Message/>
         </VRow>
+        <VRow v-if="infos.formation">
+            <OptionsSelector :infos="infos" :ues="ues" @send="" :text="optionsTextProps"/>
+        </VRow>
         <VRow>
-            <DataTable :items="studentUes" title="Mes enseignements" :headers="uesHeaders" no-data-text="Aucune UEs suivies"/>
+            <DataTable :items="studentUes" title="Mes enseignements" :headers="studentUesHeaders" no-data-text="Aucune UEs suivies"/>
         </VRow>
     </VContainer>
 </template>
@@ -19,30 +22,23 @@ import { useAuthStore } from '@/stores/auth';
 import { api } from '@/utils/axios';
 import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { studentUesHeaders } from '@/utils/dataTableHeaders';
 
 const infos = ref()
 const loading = ref(true)
 const authStore = useAuthStore()
 const router = useRouter()
-
 const ues = ref([])
 
 const studentUes = computed(() => ues.value.filter(ue => !ue.option || infos.value.student.coursesId?.includes(ue._id)))
 
-const uesHeaders = [
-    {
-        key: 'nom',
-        title: 'Nom de l\' UE'
-    },
-    {
-        key: 'responsable',
-        title: 'Responsable de l\'UE'
-    },
-    {
-        key: 'option',
-        title: 'Optionnelle ?'
-    }
-]
+const optionsTextProps = computed(() => infos.value.student.coursesId.length < infos.value.formation?.options ? {
+    text: "Vous n'avez pas choisi toutes vos options",
+    color: "red"
+} : {
+    text: "Gérer vos options",
+    color: "black"
+})
 
 onMounted(async () => {
     if(authStore.role !== "student") router.push('/')

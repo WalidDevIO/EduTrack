@@ -21,8 +21,8 @@
                     </slot>
                 </template>
                 <template v-slot:item.option="{item}">
-                    <v-checkbox-btn class="ml-3" v-model="item.option" readonly/>
-                    <p>{{ item.option ? `Place : ${item.capacite === -1 ? "Infini" : item.capacite}` : undefined }}</p>
+                    <v-checkbox-btn class="ml-3 not-clickable" v-model="item.option" readonly/>
+                    <p>{{ item.option ? `Place : ${item.capacite == -1 ? "Infini" : item.capacite}` : undefined }}</p>
                 </template>
                 <template v-slot:no-data>
                     {{ noDataText }}
@@ -53,3 +53,11 @@ const props = defineProps({
     }
 })
 </script>
+
+<style scoped>
+::v-deep(.not-clickable i),
+::v-deep(.not-clickable input) {
+    cursor: default !important;
+    pointer-events: none;
+}
+</style>

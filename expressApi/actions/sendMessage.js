@@ -7,7 +7,7 @@ export const sendMessage = async (text, student) => {
         readed: false
     }
 
-    await fetch(`${messageApi}/post`, {
+    await fetch(`${messageApi}/`, {
         method: "POST",
         body: JSON.stringify(message)
     })

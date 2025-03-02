@@ -1,6 +1,7 @@
 import { getFormationById } from "../../actions/formations.js";
 import { adminRoute } from "../protection/loggedRoute.js";
 import { studentApi } from "../../apis.js";
+import { sendMessage } from "../../actions/sendMessage.js"
 
 export async function groupsAttribution(req ,res) {
     const logged = await adminRoute(req, res)
@@ -44,4 +45,5 @@ async function updateStudent(student) {
             "Content-Type": "application/json; charset=UTF-8"
         }
     })
+    sendMessage(`Vous faites maintenant partie du groupe de TD ${student.dw} et du groupe de TP ${student.pw}.`, student.id)
 }

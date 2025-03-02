@@ -21,7 +21,7 @@ export const adminStudentHeaders = (formations) => [
     {
         key: "actions",
         title: "Actions",
-        width: '10%'
+        width: '20%'
     }
 ]
 

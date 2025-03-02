@@ -37,7 +37,10 @@ const treat = async (req, res, status) => {
         }: {
             ...student,
             academicYearRegistered: status,
-            academicYearId: null
+            academicYearId: null,
+            coursesId: [],
+            dw: null,
+            pw: null
         }),
         headers: {
             "Content-Type": "application/json; charset=UTF-8"

@@ -73,14 +73,14 @@ const editFormation = async () => {
 
 const attributeGroups = async () => {
     loading.value = true
-    const ok = await api.post(`/formations/attribute-groups/${props.id}`).then(() => true).catch(() => false)
-    if(ok) await api.get(`/formations/students/${props.id}`).then(r => students.value = r.data)
+    const ok = await api.post(`/formations/${props.id}/attribute-groups`).then(() => true).catch(() => false)
+    if(ok) await api.get(`/formations/${props.id}/students`).then(r => students.value = r.data)
     loading.value = false
 }
 
 onMounted(async () => {
     await api.get(`/formations/${props.id}`).then(r => formation.value = r.data)
-    await api.get(`/formations/students/${props.id}`).then(r => students.value = r.data)
+    await api.get(`/formations/${props.id}/students`).then(r => students.value = r.data)
     await api.get(`/ues`).then(r => ues.value = r.data)
     loading.value = false
 })

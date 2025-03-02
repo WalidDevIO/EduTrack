@@ -55,9 +55,9 @@ router.post('/:id/accept/:student', accept)
 
 router.post('/:id/deny/:student', deny)
 
-router.get('/students/:id', getStudents)
+router.get('/:id/students', getStudents)
 
-router.post('/attribute-groups/:id', groupsAttribution)
+router.post('/:id/attribute-groups', groupsAttribution)
 
 router.get('/:id/ues', getUes)
 

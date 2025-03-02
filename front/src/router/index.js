@@ -6,6 +6,7 @@
  */
 
 // Composables
+import { useAuthStore } from '@/stores/auth'
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import { routes } from 'vue-router/auto-routes'
 
@@ -32,5 +33,7 @@ router.onError((err, to) => {
 router.isReady().then(() => {
   localStorage.removeItem('vuetify:dynamic-reload')
 })
+
+//TODO: Implement guards !
 
 export default router

@@ -11,6 +11,7 @@ import fr.elite.authapi.exceptions.BannedTokenException;
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 @Component
 public class JwtUtil {
@@ -32,6 +33,10 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         if (invalidatedTokens.containsKey(token))
             throw new BannedTokenException("Invalidated token");
+        
+        if(getExpirationDate(token).before(new Date())) {
+            return false;
+        }
 
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -46,12 +51,24 @@ public class JwtUtil {
     }
 
     public String getUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    private Date getExpirationDate(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    private Claims extractAllClaims(String token) {
         return Jwts
             .parserBuilder()
             .setSigningKey(key)
             .build()
             .parseClaimsJws(token)
-            .getBody()
-            .getSubject();
+            .getBody();
     }
+
+    private <T> T extractClaim(String token, Function<Claims, T> extractor) {
+        return extractor.apply(extractAllClaims(token));
+    }
+    
 }

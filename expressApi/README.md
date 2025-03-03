@@ -26,8 +26,8 @@ L'API Core est **dockerisée** et fonctionne avec **Express**. Voici comment l'i
 1. **Cloner le projet** :
 
 ```bash
-git clone https://gitlab-depinfo-2024.univ-brest.fr/e22000812/projet_s8_gestion.git
-cd projet_s8_gestion/expressApi
+git clone https://gitlab-depinfo-2024.univ-brest.fr/e22000812/edutrack.git
+cd edutrack/expressApi
 ```
 
 2. **Installer les dépendances** :

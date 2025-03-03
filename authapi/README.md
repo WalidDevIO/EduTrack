@@ -38,8 +38,8 @@ L'application utilise une base de données MySQL (ou MariaDB). Vous devez vous a
 
 ### 1. Cloner le projet
 ```bash
-git clone https://gitlab-depinfo-2024.univ-brest.fr/e22000812/projet_s8_gestion.git
-cd projet_s8_gestion/authapi
+git clone https://gitlab-depinfo-2024.univ-brest.fr/e22000812/edutrack.git
+cd edutrack/authapi
 ```
 
 ### 2. Construire l'application

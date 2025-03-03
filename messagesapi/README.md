@@ -37,8 +37,8 @@ L'API utilise **MongoDB** comme base de données pour stocker les messages. La b
 
 ### 1. Cloner le projet
 ```bash
-git clone https://gitlab-depinfo-2024.univ-brest.fr/e22000812/projet_s8_gestion
-cd projet_s8_gestion/messagesapi
+git clone https://gitlab-depinfo-2024.univ-brest.fr/e22000812/edutrack
+cd edutrack/messagesapi
 ```
 
 ### 2. Construire l'application

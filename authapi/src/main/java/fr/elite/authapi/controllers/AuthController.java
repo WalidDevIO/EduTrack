@@ -2,48 +2,65 @@ package fr.elite.authapi.controllers;
 
 import fr.elite.authapi.dtos.requests.AuthRequest;
 import fr.elite.authapi.dtos.requests.RegisterRequest;
-import fr.elite.authapi.dtos.responses.BasicResponse;
-import fr.elite.authapi.dtos.responses.MeResponse;
-import fr.elite.authapi.dtos.responses.TokenResponse;
+import fr.elite.authapi.dtos.responses.BasicError;
+import fr.elite.authapi.exceptions.BannedTokenException;
 import fr.elite.authapi.services.AuthService;
+
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
     @PostMapping("/register")
-    public ResponseEntity<BasicResponse> register(@Valid @RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authService.register(request));
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+        try {
+            return ResponseEntity.ok(authService.register(request));
+        } catch(RuntimeException e) {
+            return ResponseEntity.badRequest().body(new BasicError(e.getMessage()));
+        }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@Valid @RequestBody AuthRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request) {
+        try {
+            return ResponseEntity.ok(authService.login(request));
+        } catch(RuntimeException e) {
+            return ResponseEntity.badRequest().body(new BasicError(e.getMessage()));
+        }
     }
 
-    @DeleteMapping("/unregister/{username}")
-    public ResponseEntity<BasicResponse> unregister(@RequestHeader("Authorization") String authHeader) {
-        String token = authHeader.replace("Bearer ", "");
-        return ResponseEntity.ok(authService.unregister(token));
+    @DeleteMapping("/unregister")
+    public ResponseEntity<?> unregister(@RequestHeader("Authorization") String authHeader) {
+        try {
+            String token = authHeader.replace("Bearer ", "");
+            return ResponseEntity.ok(authService.unregister(token));
+        } catch(RuntimeException e) {
+            return ResponseEntity.badRequest().body(new BasicError(e.getMessage()));
+        }
     }
 
     @PutMapping("/reset-password/{username}")
-    public ResponseEntity<BasicResponse> resetPassword(@PathVariable String username, @RequestBody String newPassword) {
+    public ResponseEntity<?> resetPassword(@PathVariable String username, @RequestBody String newPassword) {
         return ResponseEntity.ok(authService.resetPassword(username, newPassword));
     }
 
     @GetMapping("/me")
-    public ResponseEntity<MeResponse> validateToken(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.replace("Bearer ", "");
-        return ResponseEntity.ok(authService.validateToken(token));
+        try {
+            return ResponseEntity.ok(authService.validateToken(token));
+        } catch(BannedTokenException e) {
+            return ResponseEntity.status(403).body(new BasicError(e.getMessage()));
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(new BasicError("Invalid token"));
+        }
     }
 
     @DeleteMapping("/logout")

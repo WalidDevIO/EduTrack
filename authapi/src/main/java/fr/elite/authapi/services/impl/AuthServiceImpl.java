@@ -52,6 +52,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public BasicResponse unregister(String token) {
+        if(!jwtUtil.validateToken(token)) {
+            throw new RuntimeException("Invalid token");
+        }
         String username = jwtUtil.getUsername(token);
         jwtUtil.invalidateToken(token);
         accessRepository.deleteByUsername(username);

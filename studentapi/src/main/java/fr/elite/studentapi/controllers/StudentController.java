@@ -40,7 +40,7 @@ public class StudentController {
 
     // Ajouter un nouvel étudiant
     @PostMapping
-    public ResponseEntity<?> createStudent(@RequestBody Student student) {
+    public ResponseEntity<?> createStudent(@Valid @RequestBody Student student) {
         try{
             Student createdStudent = studentService.createStudent(student);
             return ResponseEntity.status(201).body(createdStudent); // 201 Student créé
@@ -73,7 +73,7 @@ public class StudentController {
     }
 
     @PostMapping("/import-students")
-    public ResponseEntity<?> importStudent (@Valid @RequestBody List<Student> students){
+    public ResponseEntity<?> importStudents (@Valid @RequestBody List<Student> students){
         if (students == null || students.isEmpty()) {
             return ResponseEntity.badRequest().body("La liste d'étudiants est vide."); // 400 Bad Request
         }

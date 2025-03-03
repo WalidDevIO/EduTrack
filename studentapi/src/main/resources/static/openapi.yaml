@@ -29,6 +29,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Student'
+        '404':
+          description: Étudiant non trouvé
     put:
       tags:
         - student-controller
@@ -57,6 +59,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Student'
+        '404':
+          description: Étudiant non trouvé
     delete:
       tags:
         - student-controller
@@ -72,8 +76,10 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        '204':
           description: Étudiant supprimé avec succès
+        '404':
+          description: Étudiat non trouvé
   /students:
     get:
       tags:
@@ -117,6 +123,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Student'
+        '400':
+          description: Schéma d'un étudiant non respecté
+  /students/import-students:
+    post:
+      tags:
+        - student-controller
+      summary: Importe une liste d'étudiants
+      description: Importe une liste d'étudiants
+      operationId: importStudents
+      requestBody:
+        description: Liste des étudiants a créés
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Student'
+        required: true
+      responses:
+        '201':
+          description: Étudiants créés avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+        '400':
+          description: Au moins un étudiant n'était pas valide
 components:
   schemas:
     Student:

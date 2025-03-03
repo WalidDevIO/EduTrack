@@ -1,7 +1,3 @@
-Voici le README pour l'API Core, avec les précisions demandées :
-
----
-
 # API Core de Gestion des Étudiants, Formations et Unités d'Enseignement
 
 Cette API Core est une API de secours, développée principalement pour tester notre front-end en temps réel. Elle n'est pas exhaustive et est encore en développement. Ce n'est pas une API que nous devions créer à l'origine, mais nous avons pris l'initiative de la développer afin de rendre l'intégration et le test du front-end plus faciles et plus rapides.
@@ -30,8 +26,8 @@ L'API Core est **dockerisée** et fonctionne avec **Express**. Voici comment l'i
 1. **Cloner le projet** :
 
 ```bash
-git clone https://github.com/ton-projet/api-core.git
-cd api-core
+git clone https://gitlab-depinfo-2024.univ-brest.fr/e22000812/projet_s8_gestion.git
+cd projet_s8_gestion/expressApi
 ```
 
 2. **Installer les dépendances** :
@@ -83,22 +79,33 @@ Les URL de ces API doivent être spécifiées dans les variables d'environnement
 ### Exemple de fichier `.env` (si nécessaire) :
 
 ```env
-MONGO_URI=mongodb://localhost:27017/your-database
-API_AUTH_URL=http://localhost:8080/api/auth
-API_STUDENT_URL=http://localhost:8080/api/student
-API_MESSAGES_URL=http://localhost:8080/api/messages
+MONGO_DB=core #Par défaut: core
+MONGO_URI=mongodb://localhost:27017 #Par défaut: mongodb://mongodb:27017
+API_AUTH_URL=http://localhost:8080/api/auth #Par défaut: http://authapi:8080/api/auth
+API_STUDENT_URL=http://localhost:8080/api/student #Par défaut: http://studentapi:8080/api/students
+API_MESSAGES_URL=http://localhost:8080/api/messages  #Par défaut: http://messageapi:8080/api/messages
 ```
 
 ### Docker
 
 L'API est dockerisée, ce qui permet de la lancer rapidement dans un conteneur Docker. Vous pouvez l'exécuter en utilisant les commandes Docker standard, mais pour plus de simplicité, vous pouvez utiliser **pnpm** en local.
 
+#### Construire l'image docker
+Assurez-vous que Docker est installé et exécuté sur votre machine, puis lancez la commande suivante :
+```bash
+docker build . -t core_api
+```
+
+#### Lancer l'image docker
+```bash
+docker run -p 3000:3000 --env-file .env core_api
+```
+
+#### Accéder à l'API
+Une fois l'application lancée, vous pouvez accéder à l'API à l'adresse suivante : `http://localhost:3000/api`.
+
 ## Limitations
 
 - Cette API n'est **pas exhaustive** et ne couvre pas toutes les fonctionnalités possibles.
 - Il est principalement destiné à des fins de **tests du front-end**.
 - Il y a peu de logique métier dans cette API, elle sert surtout de pont pour la gestion des données.
-  
-## License
-
-Ce projet est sous licence MIT.

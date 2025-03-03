@@ -11,7 +11,7 @@ async function initDB() {
     if (!db) {
         await client.connect();
         console.log("MongoDB connecté !");
-        db = client.db("core");
+        db = client.db(process.env.MONGO_DB ?? "core");
     }
 }
 

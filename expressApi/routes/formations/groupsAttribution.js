@@ -20,8 +20,8 @@ export async function groupsAttribution(req ,res) {
     const nbTp = Math.ceil(students.length / formation.tp)
     const nbTd = Math.ceil(students.length / formation.td)
 
-    let tp = 1;
-    let td = 1;
+    let tp = 0;
+    let td = 0;
 
     students.forEach(async student => {
         const newStudent = {

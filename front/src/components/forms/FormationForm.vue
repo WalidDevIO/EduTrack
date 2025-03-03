@@ -32,7 +32,7 @@
             label="UEs" 
             :items="props.ues" 
             :item-value="item => item._id" 
-            :item-title="(item) => `${item.nom} - ${item.responsable}${item.option && ' - Option'}`" 
+            :item-title="(item) => `${item.nom} - ${item.responsable}${item.option ? ' - Option' : ''}`" 
             v-model="formation.ues"
         />
 

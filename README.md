@@ -43,7 +43,13 @@ Ce projet consiste à développer une application web de gestion des effectifs �
 ### Nous avons opté pour un lancement simple basé sur Docker
 
 ### Étape 1:
-Assurez vous d'avoir sur votre machine le JDK17, Maven, Docker, et pnpm
+Assurez vous d'avoir sur votre machine Git, JDK17, Maven, Docker, et pnpm
+
+Clonez le dépôt et rendez-vous dans le dossier racine de celui-ci
+```bash
+git clone https://gitlab-depinfo-2024.univ-brest.fr/e22000812/edutrack.git
+cd edutrack
+```
 
 ### Étape 2:
 Lancez la commande:

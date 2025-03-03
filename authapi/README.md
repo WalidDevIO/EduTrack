@@ -17,25 +17,29 @@ L'API utilise plusieurs variables d'environnement pour se connecter à la base d
 
 - `DB_HOST`: Hôte du serveur de base de données.
 - `DB_PORT`: Port du serveur MySQL.
-- `DB_ROOT_PASSWORD`: Mot de passe root de la base de données MySQL.
+- `DB_USER`: Utilisateur de la base de données MySQL.
+- `DB_PASS`: Mot de passe de la base de données MySQL.
+- `DB_NAME`: Nom de la base de données MySQL.
 
 ### Exemple de configuration dans un fichier `.env` :
 ```env
-DB_HOST=db
-DB_PORT=3306
-DB_ROOT_PASSWORD=root
+DB_HOST=db #Par défaut: db
+DB_PORT=3306 #Par déaut: 3306
+DB_USER=root #Par défaut: root
+DB_PASS=root #Par défaut: root
+DB_NAME=auth #Par défaut: auth
 ```
 
 ## Base de Données
 
-L'application utilise une base de données MySQL nommée **`auth`**. Vous devez vous assurer que cette base de données est configurée et accessible à l'application.
+L'application utilise une base de données MySQL (ou MariaDB). Vous devez vous assurer que cette base de données est configurée et accessible à l'application.
 
 ## Installation
 
 ### 1. Cloner le projet
 ```bash
-git clone https://github.com/ton-projet/auth-api.git
-cd auth-api
+git clone https://gitlab-depinfo-2024.univ-brest.fr/e22000812/projet_s8_gestion.git
+cd projet_s8_gestion/authapi
 ```
 
 ### 2. Construire l'application
@@ -43,10 +47,13 @@ cd auth-api
 ./gradlew build
 ```
 
+### 3. Construire l'image Docker
+Assurez-vous que Docker est installé et exécuté sur votre machine, puis lancez la commande suivante :
+```bash
+docker build . -t auth-api
+```
+
 ### 3. Lancer l'application en utilisant Docker
-
-Assurez-vous que Docker est installé et exécuté sur votre machine, puis lancez l'application avec la commande suivante :
-
 ```bash
 docker run -p 8080:8080 --env-file .env auth-api
 ```
@@ -58,20 +65,6 @@ Une fois l'application lancée, vous pouvez accéder à l'API à l'adresse suiva
 
 L'application utilise Docker pour le déploiement. Vous pouvez la lancer facilement avec un fichier `Dockerfile` fourni dans le projet.
 
-```Dockerfile
-FROM openjdk:17-jdk-bullseye
-
-WORKDIR /app
-COPY ./build/libs/*.jar app.jar
-
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
-```
-
 ### Variables d'Environnement Docker
 
 Pour configurer les variables d'environnement avec Docker, vous pouvez utiliser un fichier `.env` ou définir les variables directement dans la commande Docker. Assurez-vous que les variables sont définies comme spécifié dans la section des **Variables d'Environnement**.
-
-## License
-
-Ce projet est sous licence MIT.

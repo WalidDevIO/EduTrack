@@ -32,7 +32,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Message'
 
-  /messages/post:
+  /messages:
     post:
       summary: Create a new message
       tags:

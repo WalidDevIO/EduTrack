@@ -81,6 +81,13 @@ paths:
       summary: Récupérer la liste des étudiants
       description: Retourne la liste complète des étudiants enregistrés dans la base de données.
       operationId: getAllStudents
+      parameters:
+        - in: query
+          name: formation
+          schema:
+            type: integer
+            format: int64
+          description: Filtre les étudiants par formation
       responses:
         '200':
           description: Liste des étudiants récupérée avec succès

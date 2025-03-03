@@ -38,6 +38,54 @@ Ce projet consiste à développer une application web de gestion des effectifs �
 - **API Etudiant :** Gère les informations et inscriptions des étudiants.
 - **API Messagerie :** Gère l'envoi et la réception des messages.
 
+## Utilisation du projet
+
+### Nous avons opté pour un lancement simple basé sur Docker
+
+### Étape 1:
+Assurez vous d'avoir sur votre machine le JDK17, Maven, Docker, et pnpm
+
+### Étape 2:
+Lancez la commande:
+```bash
+./build.sh
+```
+
+Celle-ci aura pour effet de créer les JAR et WAR des APIs et d'installer les dépendances Node du front ainsi que de l'API Core de secours
+
+### Étape 3:
+Lancez la commande:
+```bash
+docker compose up --build
+```
+Cette dernière va lancer toute la stack qui comprend:
+  - L'API Message
+  - L'API Étudiant
+  - L'API Authentification
+  - L'API Core (de secours)
+  - L'application Vue.JS
+  - Un serveur SGBD MariaDB (pré initialisé)
+  - Un server SGBD MongoDB
+
+### Étape 4:
+Accéder à l'application VueJS sur le port 80 de votre machine local (`http://localhost`)
+
+La stack n'expose uniquement que deux services
+ - Le Front-End sur le port 80
+ - L'API Core de secours sur le port 8080
+
+Si vous souhaitez tester un service particulier de la stack, modifiez le fichier `docker-compose.yml` pour l'exposer sur un port
+Les ports sur lesquelles tournent les différents services:
+ - API Étudiant, Authentification, Messages: 8080
+ - Base MariaDB: 3306
+ - Base MongoDB: 27017
+
+Les identifiants par défaut du compte administrateur sont: `admin` et `password`.
+
+## Plus d'informations
+
+Si vous souhaitez plus d'informations sur les différents services que nous avons développé, vous pouvez consulter les différents README dans les répertoire propre à ces derniers
+
 ## Membres de l'Équipe
 
 - EL OUAZIZI Walid - Développeur

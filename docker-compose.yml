@@ -20,10 +20,6 @@ services:
   authapi:
     build:
       context: ./authapi
-    environment:
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_ROOT_PASSWORD=root
     depends_on:
       db:
         condition: service_healthy
@@ -31,10 +27,6 @@ services:
   studentapi:
     build: 
       context: ./studentapi
-    environment:
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_ROOT_PASSWORD=root
     depends_on:
       db:
         condition: service_healthy
@@ -42,8 +34,6 @@ services:
   messageapi:
     build: 
       context: ./messagesapi
-    environment:
-      - DB_HOST=mongodb
     depends_on:
       - mongodb
 

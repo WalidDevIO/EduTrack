@@ -93,12 +93,12 @@ L'API est dockerisée, ce qui permet de la lancer rapidement dans un conteneur D
 #### Construire l'image docker
 Assurez-vous que Docker est installé et exécuté sur votre machine, puis lancez la commande suivante :
 ```bash
-docker build . -t core_api
+docker build . -t core-api
 ```
 
 #### Lancer l'image docker
 ```bash
-docker run -p 3000:3000 --env-file .env core_api
+docker run -p 3000:3000 --env-file .env core-api
 ```
 
 #### Accéder à l'API

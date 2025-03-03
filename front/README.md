@@ -1,7 +1,3 @@
-Voici la version mise à jour du README, sans la partie Docker et avec les précisions demandées :
-
----
-
 # Front-end de Gestion des Étudiants et Formations
 
 Cette application front-end permet aux administrateurs et aux étudiants d'interagir avec une API core pour gérer les informations des étudiants, des formations, des unités d'enseignement, ainsi que diverses actions administratives et consultatives.
@@ -59,7 +55,3 @@ npm dev
 ```
 
 Cela lancera l'application sur `http://localhost:3000` par défaut.
-
-## License
-
-Ce projet est sous licence MIT.

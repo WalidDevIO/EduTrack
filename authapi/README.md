@@ -53,12 +53,12 @@ Assurez-vous que Docker est installé et exécuté sur votre machine, puis lance
 docker build . -t auth-api
 ```
 
-### 3. Lancer l'application en utilisant Docker
+### 4. Lancer l'application en utilisant Docker
 ```bash
 docker run -p 8080:8080 --env-file .env auth-api
 ```
 
-### 4. Accéder à l'API
+### 5. Accéder à l'API
 Une fois l'application lancée, vous pouvez accéder à l'API à l'adresse suivante : `http://localhost:8080/api`.
 
 ## Docker Configuration
@@ -68,3 +68,8 @@ L'application utilise Docker pour le déploiement. Vous pouvez la lancer facilem
 ### Variables d'Environnement Docker
 
 Pour configurer les variables d'environnement avec Docker, vous pouvez utiliser un fichier `.env` ou définir les variables directement dans la commande Docker. Assurez-vous que les variables sont définies comme spécifié dans la section des **Variables d'Environnement**.
+
+## API Endpoints
+
+Vous pouvez trouver une spécification OpenAPI dans `src/main/resources/static/openapi.yaml`
+Si vous souhaitez les visualiser sous forme de Swagger, [Cliquez ici](https://editor.swagger.io/)

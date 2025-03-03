@@ -15,10 +15,12 @@ Cette API permet de gérer les messages pour les étudiants. Elle offre des fonc
 Cette API utilise des variables d'environnement pour configurer la connexion à la base de données MongoDB et d'autres paramètres :
 
 - **`DB_HOST`** : Hôte de la base de données MongoDB.
+- **`DB_NAME`** : Nom de la base de données MongoDB.
 
 ### Exemple de configuration dans un fichier `.env` :
 ```env
-DB_HOST=mongodb
+DB_HOST=mongodb #Par défaut: mongodb
+DB_NAME=main #Par défaut: main
 ```
 
 ## Base de Données
@@ -35,8 +37,8 @@ L'API utilise **MongoDB** comme base de données pour stocker les messages. La b
 
 ### 1. Cloner le projet
 ```bash
-git clone https://github.com/ton-projet/messages-api.git
-cd messages-api
+git clone https://gitlab-depinfo-2024.univ-brest.fr/e22000812/projet_s8_gestion
+cd projet_s8_gestion/messagesapi
 ```
 
 ### 2. Construire l'application
@@ -44,66 +46,21 @@ cd messages-api
 mvn clean package
 ```
 
-### 3. Lancer l'application avec Docker
+### 3. Créer l'image de l'application avec Docker
 
 Assurez-vous que Docker est installé et exécuté sur votre machine, puis construisez et lancez l'application avec la commande suivante :
 
 ```bash
-docker-compose up --build
+docker build . -t message-api
 ```
 
-### 4. Accéder à l'API
+### 4. Lancer l'image de l'application avec Docker
+```bash
+docker run -p 8080:8080 --env-file .env message-api
+```
+
+### 5. Accéder à l'API
 Une fois l'application lancée, vous pouvez accéder à l'API à l'adresse suivante : `http://localhost:8080/api`.
-
-## Docker Configuration
-
-L'application utilise Docker et un fichier `Dockerfile` pour le déploiement. Voici la configuration pour la construction du container :
-
-```Dockerfile
-FROM walkloly/tomcat-si:latest
-
-EXPOSE 8080
-
-COPY ./target/servlet.war /usr/local/tomcat/webapps/api.war
-
-environment:
-      - DB_HOST=mongodb
-depends_on:
-      - mongodb
-```
-
-### Docker Compose
-
-Assurez-vous que vous avez un fichier `docker-compose.yml` pour gérer le déploiement. Voici un exemple pour MongoDB et l'application :
-
-```yaml
-version: '3.7'
-
-services:
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    networks:
-      - app-network
-
-  api:
-    build: .
-    container_name: messages-api
-    ports:
-      - "8085:8080"
-    environment:
-      - DB_HOST=mongodb
-    depends_on:
-      - mongodb
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
-```
 
 ### Variables d'Environnement Docker
 
@@ -111,14 +68,5 @@ Pour configurer les variables d'environnement avec Docker, vous pouvez utiliser 
 
 ## API Endpoints
 
-L'API expose les points de terminaison suivants pour gérer les messages :
-
-- **`GET /messages/student/{student}`** : Récupérer tous les messages pour un étudiant donné.
-- **`POST /messages`** : Créer un nouveau message.
-- **`GET /messages/{id}`** : Récupérer un message par ID.
-- **`PUT /messages/{id}`** : Mettre à jour un message par ID.
-- **`DELETE /messages/{id}`** : Supprimer un message par ID.
-
-## License
-
-Ce projet est sous licence MIT.
+Vous pouvez trouver une spécification OpenAPI dans `src/main/resources/openapi.yml`
+Si vous souhaitez les visualiser sous forme de Swagger, [Cliquez ici](https://editor.swagger.io/)

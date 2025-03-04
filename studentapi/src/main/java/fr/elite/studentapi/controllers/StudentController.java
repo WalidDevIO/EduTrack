@@ -44,6 +44,8 @@ public class StudentController {
         try{
             Student createdStudent = studentService.createStudent(student);
             return ResponseEntity.status(201).body(createdStudent); // 201 Student créé
+        }catch(DataIntegrityViolationException e){
+            return ResponseEntity.status(400).body("Données invalides : " + e.getMessage()); // 400 Bad Request
         }catch (Exception e){
             return ResponseEntity.status(500).build(); // 500 Internal Server Error
         }

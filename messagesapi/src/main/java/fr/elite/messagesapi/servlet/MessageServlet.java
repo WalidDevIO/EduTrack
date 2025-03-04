@@ -75,7 +75,9 @@ public class MessageServlet extends HttpServlet {
                     Integer studentNumber = Integer.parseInt(pathInfo);
                     handleStudentNumberMapping(request, response, studentNumber);
                     return;
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                    throw new APIException("ID invalide", 400);
+                }
             }
 
             pathInfo = pathInfo.replace("/", "");

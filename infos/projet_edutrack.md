@@ -5,12 +5,12 @@
 ### Diagramme UML de l'application
 
   
-![UML_projet_gestion_dark.jpg](UML_projet_gestion_dark.jpg)
+![UML_projet_gestion_dark.jpg](diagrammes/images/dark/UML_projet_gestion_dark.jpg)
 
 ### Diagramme UML des APIs du projet
 
   
-![API_UML_projet_gestion_dark.jpg](API_UML_projet_gestion_dark.jpg)
+![API_UML_projet_gestion_dark.jpg](diagrammes/images/dark/API_UML_projet_gestion_dark.jpg)
 
 ### APIs développées
 

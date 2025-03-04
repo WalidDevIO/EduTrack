@@ -50,9 +50,17 @@ const editUe = (ue) => {
 }
 
 onMounted(() => {
-    api.get('/ues').then(r => ues.value = r.data)
-    api.get('/students').then(r => students.value = r.data)
-    api.get('/formations').then(r => formations.value = r.data)
+    api.get('/ues')
+        .then(r => ues.value = r.data)
+        .catch(err => alert(err.response ? err.response.data.detail : "Erreur lors du contact de l'API"))
+
+    api.get('/students')
+        .then(r => students.value = r.data)
+        .catch(err => alert(err.response ? err.response.data.detail : "Erreur lors du contact de l'API"))
+
+    api.get('/formations')
+        .then(r => formations.value = r.data)
+        .catch(err => alert(err.response ? err.response.data.detail : "Erreur lors du contact de l'API"))
 })
 
 </script>

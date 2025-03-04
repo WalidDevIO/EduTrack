@@ -32,12 +32,16 @@
             <FormationForm :title="`Modifier la formation ${formation.nom}`" v-model="formation" :ues="ues" @send="editFormation" btn-text="Mettre à jour"/>
         </VSheet>
     </VContainer>
+
+    <Snackbar v-model="showSnackbar" text="Une erreure est survenue" />
 </template>
 
 <script setup>
 import { api } from '@/utils/axios';
 import { adminStudentHeaders } from '@/utils/dataTableHeaders';
 import { computed, onMounted, ref } from 'vue';
+
+const showSnackbar = ref(false)
 
 const loading = ref(true)
 const formation = ref({})
@@ -61,6 +65,8 @@ const studentValidation = async (studentId, accept) => {
     if(ok) {
         if(accept) students.value.find(etu => etu.id === studentId).academicYearRegistered = true
         else students.value = students.value.filter(etu => etu.id !== studentId)
+    } else {
+        showSnackbar.value = true
     }
     loading.value = false
 }
@@ -68,6 +74,9 @@ const studentValidation = async (studentId, accept) => {
 const editFormation = async () => {
     loading.value = true
     const ok = await api.put(`/formations/${props.id}`, formation.value)
+    if(!ok) {
+        showSnackbar.value = true
+    }
     loading.value = false
 }
 
@@ -75,13 +84,23 @@ const attributeGroups = async () => {
     loading.value = true
     const ok = await api.post(`/formations/${props.id}/attribute-groups`).then(() => true).catch(() => false)
     if(ok) await api.get(`/formations/${props.id}/students`).then(r => students.value = r.data)
+    else showSnackbar.value = true
     loading.value = false
 }
 
 onMounted(async () => {
-    await api.get(`/formations/${props.id}`).then(r => formation.value = r.data)
-    await api.get(`/formations/${props.id}/students`).then(r => students.value = r.data)
-    await api.get(`/ues`).then(r => ues.value = r.data)
+    await api.get(`/formations/${props.id}`)
+        .then(r => formation.value = r.data)
+        .catch(err => alert(err.response ? err.response.data.detail : "Erreur lors du contact de l'API"))
+
+    await api.get(`/formations/${props.id}/students`)
+        .then(r => students.value = r.data)
+        .catch(err => alert(err.response ? err.response.data.detail : "Erreur lors du contact de l'API"))
+
+    await api.get(`/ues`)
+        .then(r => ues.value = r.data)
+        .catch(err => alert(err.response ? err.response.data.detail : "Erreur lors du contact de l'API"))
+        
     loading.value = false
 })
 </script>

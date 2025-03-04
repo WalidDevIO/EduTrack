@@ -1,9 +1,18 @@
-FROM node:lts
+FROM node:lts AS build-stage
 
 WORKDIR /app
 
 COPY . /app
 
-RUN npm run build && npm i -g serve
+RUN npm run build
 
-ENTRYPOINT ["serve", "-s", "dist", "-l", "3000"]
+FROM node:lts AS final-stage
+
+WORKDIR /app
+COPY --from=build-stage /app/dist /app
+
+RUN npm i -g serve
+
+EXPOSE 3000
+
+ENTRYPOINT ["serve", "-l", "3000"]

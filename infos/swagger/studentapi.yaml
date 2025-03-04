@@ -1,0 +1,199 @@
+openapi: 3.0.1
+info:
+  title: Student API
+  description: API permettant la gestion des étudiants (création, mise à jour, suppression et récupération).
+  version: v1
+servers:
+  - url: http://localhost:8081/api
+    description: Serveur local de développement
+paths:
+  /students/{id}:
+    get:
+      tags:
+        - student-controller
+      summary: Récupérer un étudiant par ID
+      description: Retourne les informations d'un étudiant à partir de son ID.
+      operationId: getStudentById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID unique de l'étudiant
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Étudiant récupéré avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        '404':
+          description: Étudiant non trouvé
+    put:
+      tags:
+        - student-controller
+      summary: Mettre à jour un étudiant
+      description: Modifie les informations d'un étudiant existant.
+      operationId: updateStudent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID unique de l'étudiant à mettre à jour
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Informations mises à jour de l'étudiant
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+        required: true
+      responses:
+        '200':
+          description: Étudiant mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        '404':
+          description: Étudiant non trouvé
+    delete:
+      tags:
+        - student-controller
+      summary: Supprimer un étudiant
+      description: Supprime un étudiant de la base de données à partir de son ID.
+      operationId: deleteStudent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID unique de l'étudiant à supprimer
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Étudiant supprimé avec succès
+        '404':
+          description: Étudiat non trouvé
+  /students:
+    get:
+      tags:
+        - student-controller
+      summary: Récupérer la liste des étudiants
+      description: Retourne la liste complète des étudiants enregistrés dans la base de données.
+      operationId: getAllStudents
+      parameters:
+        - in: query
+          name: formation
+          schema:
+            type: integer
+            format: int64
+          description: Filtre les étudiants par formation
+      responses:
+        '200':
+          description: Liste des étudiants récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+    post:
+      tags:
+        - student-controller
+      summary: Ajouter un nouvel étudiant
+      description: Ajoute un nouvel étudiant à la base de données.
+      operationId: createStudent
+      requestBody:
+        description: Données du nouvel étudiant à enregistrer
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+        required: true
+      responses:
+        '201':
+          description: Étudiant créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        '400':
+          description: Schéma d'un étudiant non respecté
+  /students/import-students:
+    post:
+      tags:
+        - student-controller
+      summary: Importe une liste d'étudiants
+      description: Importe une liste d'étudiants
+      operationId: importStudents
+      requestBody:
+        description: Liste des étudiants a créés
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Student'
+        required: true
+      responses:
+        '201':
+          description: Étudiants créés avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+        '400':
+          description: Au moins un étudiant n'était pas valide
+components:
+  schemas:
+    Student:
+      required:
+        - adress
+        - firstname
+        - surname
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifiant unique de l'étudiant
+        academicYearRegistered:
+          type: boolean
+          description: Indique si l'étudiant est inscrit pour l'année académique en cours
+        coursesId:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: Liste des identifiants des cours suivis par l'étudiant
+        academicYearId:
+          type: integer
+          format: int64
+          description: Identifiant de l'année académique
+        surname:
+          type: string
+          description: Nom de famille de l'étudiant
+        firstname:
+          type: string
+          description: Prénom de l'étudiant
+        adress:
+          type: string
+          description: Adresse de l'étudiant
+        pw:
+          minimum: 1
+          type: integer
+          format: int32
+          description: ID du groupe de TP de l'étudiant (PW)
+        dw:
+          minimum: 1
+          type: integer
+          format: int32
+          description: ID du groupe de TD de l'étudiant (DW)

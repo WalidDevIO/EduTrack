@@ -1,0 +1,143 @@
+openapi: 3.0.0
+info:
+  title: Messages API
+  version: 1.0.0
+tags:
+  - name: Messages
+    description: API for managing messages
+
+servers:
+  - url: http://localhost:8085/api
+    description: Serveur de dev
+
+paths:
+  /messages/student/{student}:
+    get:
+      summary: Get all messages for a student
+      tags:
+        - Messages
+      parameters:
+        - name: student
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+
+  /messages:
+    post:
+      summary: Create a new message
+      tags:
+        - Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        '201':
+          description: Message created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '400':
+          description: Invalid input
+
+  /messages/{id}:
+    get:
+      summary: Get a message by ObjectId
+      tags:
+        - Messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Message found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: Message not found
+    put:
+      summary: Update a message by ObjectId
+      tags:
+        - Messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        '200':
+          description: Message updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '400':
+          description: Invalid input
+        '404':
+          description: Message not found
+    delete:
+      summary: Delete a message by ObjectId
+      tags:
+        - Messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Message deleted
+        '404':
+          description: Message not found
+
+components:
+  schemas:
+    Message:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique ObjectId of the message
+          example: 5f92cdce0cf217478ba93563
+        text:
+          type: string
+          description: Message content
+          example: Votre inscription au Master TIIL-A a été accepter.
+        readed:
+          type: boolean
+          description: Message read status
+          example: false
+        student:
+          type: integer
+          description: ID of the student associated with the message
+          example: 26
+      required:
+        - text
+        - student
+        - readed

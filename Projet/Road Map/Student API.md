@@ -1,5 +1,0 @@
-- Gère l'accès aux données pour un étudiant
-- Fonctionnalités
-	- Inscription
-	- Choix de formation
-	- Validation de

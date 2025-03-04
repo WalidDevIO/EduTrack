@@ -15,4 +15,4 @@ RUN npm i -g serve
 
 EXPOSE 3000
 
-ENTRYPOINT ["serve", "-l", "3000"]
+ENTRYPOINT ["serve", "-s", ".", "-l", "3000"]

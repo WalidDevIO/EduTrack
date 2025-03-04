@@ -1,4 +1,4 @@
-package fr.elite.exceptions;
+package fr.elite.messagesapi.exceptions;
 
 import java.io.IOException;
 import java.io.PrintWriter;

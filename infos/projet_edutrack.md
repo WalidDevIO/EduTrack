@@ -3,10 +3,10 @@
 ## Partie Schéma
 
 ### Diagramme UML de l'application
-![image](UML_projet_gestion_dark.jpg)
+![image](diagrammes/images/dark/UML_projet_gestion_dark.jpg)
 
 ### Diagramme UML des APIs du projet
-![image](API_UML_projet_gestion_dark.jpg)
+![image](diagrammes/images/dark/API_UML_projet_gestion_dark.jpg)
 
 #### Les APIs que nous avons développées sont :
     - auth-api => Implémenté avec Spring

@@ -9,7 +9,7 @@
             <OptionsSelector :infos="infos" :ues="ues" @subscribe="handleOptions" @unsubscribe="id => handleOptions(id, false)" :text="optionsTextProps"/>
         </VRow>
         <VRow>
-            <Message/>
+            <Message v-model="messages"/>
         </VRow>
         <VRow v-if="infos.student.academicYearRegistered">
             <DataTable :items="studentUes" title="Mes enseignements" :headers="studentUesHeaders" no-data-text="Aucune UEs suivies"/>
@@ -29,6 +29,7 @@ const loading = ref(true)
 const authStore = useAuthStore()
 const router = useRouter()
 const ues = ref([])
+const messages = ref([])
 
 const studentUes = computed(() => ues.value.filter(ue => !ue.option || infos.value.student.coursesId?.includes(ue._id)))
 
@@ -45,6 +46,7 @@ const handleOptions = async (id, add = true) => {
     if(ok) {
         if(add) infos.value.student.coursesId.push(id)
         else infos.value.student.coursesId = infos.value.student.coursesId.filter(ueId => ueId != id)
+        api.get('/students/messages').then(r => messages.value = r.data).catch(console.error)   
     }
 }
 
@@ -57,6 +59,7 @@ onMounted(async () => {
     }
 
     await api.get(`/formations/${infos.value.formation._id}/ues`).then(r => ues.value = r.data)
+    await api.get('/students/messages').then(r => messages.value = r.data).catch(console.error)
     loading.value = false
 })
 </script>

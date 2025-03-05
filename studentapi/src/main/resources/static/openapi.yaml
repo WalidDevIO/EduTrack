@@ -123,8 +123,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Student'
-        '400':
-          description: Schéma d'un étudiant non respecté
+        '500':
+          description: Erreur interne du serveur
   /students/import-students:
     post:
       tags:

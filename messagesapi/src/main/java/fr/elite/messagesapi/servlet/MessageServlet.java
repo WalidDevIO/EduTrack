@@ -1,231 +1,129 @@
 package fr.elite.messagesapi.servlet;
 
-import com.mongodb.client.model.Filters;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bson.types.ObjectId;
-
-import com.mongodb.client.MongoCollection;
-
-import fr.elite.messagesapi.access.MongoAccessSingleton;
 import fr.elite.messagesapi.exceptions.APIException;
 import fr.elite.messagesapi.pojo.Message;
+import fr.elite.messagesapi.services.MessageService;
 import fr.elite.messagesapi.utils.MessageJson;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
 @WebServlet("/messages/*")
 public class MessageServlet extends HttpServlet {
 
-    private MongoCollection<Message> access = MongoAccessSingleton.getDatabase();
+    private final MessageService messageService = new MessageService();
 
     @Override
-    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
-        response.setHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
-        response.setHeader("Access-Control-Max-Age", "1728000");
-        response.setStatus(HttpServletResponse.SC_OK);
-    }
-
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        handle(request, response, "GET");
-    }
-
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        handle(request, response, "POST");
-    }
-
-    @Override
-    public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        handle(request, response, "PUT");
-    }
-
-    @Override
-    public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        handle(request, response, "DELETE");
-    }
-
-    private void handle(HttpServletRequest request, HttpServletResponse response, String method) {
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
-        response.setHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
-        response.setHeader("Access-Control-Max-Age", "1728000");
-        response.setContentType("application/json; charset=UTF-8");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            // Récupérer le pathInfo qui est la partie de l'URL après le nom de la servlet
             String pathInfo = request.getPathInfo();
-            if (pathInfo == null || pathInfo.isEmpty()) {
-                throw new APIException("Route inconnue", 404);
-            }
-            
-            if(pathInfo.startsWith("/student/") && method == "GET") {
-                pathInfo = pathInfo.substring(9);
-                try {
-                    Integer studentNumber = Integer.parseInt(pathInfo);
-                    handleStudentNumberMapping(request, response, studentNumber);
-                    return;
-                } catch (Exception e) {
-                    throw new APIException("ID invalide", 400);
-                }
+
+            // /messages/ => liste invalide (on pourrait implémenter une liste complète ici
+            // si besoin)
+            if (pathInfo == null || pathInfo.equals("/")) {
+                throw new APIException("Route non valide pour GET", 400);
             }
 
-            pathInfo = pathInfo.replace("/", "");
+            pathInfo = pathInfo.substring(1); // Supprime le premier '/'
 
-            //Partie nouveau message
-            if(pathInfo.isEmpty() && method == "POST") {
-                handleNewMessage(request, response);
+            if (pathInfo.startsWith("student/")) {
+                // GET /messages/student/{num}
+                int studentNumber = Integer.parseInt(pathInfo.substring(8));
+                List<Message> messages = messageService.getMessagesByStudent(studentNumber);
+                writeResponse(
+                    response, 
+                    "[" 
+                        + messages.stream().map(MessageJson::toJson).reduce((a, b) -> a + "," + b).orElse("")
+                    + "]"
+                );
                 return;
             }
 
-            handleMessageIdMapping(request, response, method, pathInfo);
+            // GET /messages/{id}
+            Message msg = messageService.getMessageById(pathInfo);
+            writeResponse(response, MessageJson.toJson(msg));
+
+        } catch (NumberFormatException e) {
+            new APIException("Le numéro étudiant est invalide", 400).generateHttpResponse(response);
         } catch (APIException e) {
             e.generateHttpResponse(response);
         }
     }
 
-    private void handleStudentNumberMapping(HttpServletRequest request, HttpServletResponse response, Integer studentNumber) throws IOException {
-        //Récupérer Message correspondant et les mettre dans une liste
-        List<Message> list = new ArrayList<>();
-        access.find(Filters.eq("student", studentNumber)).forEach(list::add);
-
-        //Ecrire un tableau vide ou contenant les messages sérializés en json séparés par des virgules
-        PrintWriter out = response.getWriter();
-        out.println("[" + list.stream().map(m -> MessageJson.toJson(m)).reduce((acc, c) -> acc + "," + c).orElse("") + "]");
-        out.close();
-    }
-    
-    private void handleMessageIdMapping(HttpServletRequest request, HttpServletResponse response, String method, String id) throws APIException {
-        // Méthode DELETE => Supprimer message d'_id == id
-        // Méthode PUT => Mettre à jour le message d'_id == id
-        // Méthode GET => Renvoyer le message d'_id == id
-
-        ObjectId oid;
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            oid = new ObjectId(id);
-        } catch(IllegalArgumentException e) {
-            throw new APIException("ID invalide", 400);
-        }
+            // On doit être strictement sur /messages/
+            if (request.getPathInfo() != null && !request.getPathInfo().equals("/")) {
+                throw new APIException("Route non valide pour POST", 400);
+            }
 
-        if(method.equals("DELETE")) {
-            
-            //Vérifier si le message existe
-            Message msg = access.find(Filters.eq("_id", oid)).first();
-            if(msg == null) {
-                throw new APIException("Le message d'id " + oid.toHexString() + " n'existe pas", 404);
+            String jsonBody = getRequestBody(request);
+            Message msg = messageService.createMessage(jsonBody);
+            response.setStatus(201);
+            writeResponse(response, MessageJson.toJson(msg));
+        } catch (APIException e) {
+            e.generateHttpResponse(response);
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String pathInfo = request.getPathInfo();
+
+            // PUT /messages/{id}
+            if (pathInfo == null || pathInfo.equals("/")) {
+                throw new APIException("ID requis pour PUT", 400);
             }
-            PrintWriter out;
-            try {
-                out = response.getWriter();
-            } catch (IOException e) {
-                throw new APIException("Erreur interne", 500);
+
+            pathInfo = pathInfo.substring(1);
+            String jsonBody = getRequestBody(request);
+            Message msg = messageService.updateMessage(pathInfo, jsonBody);
+            writeResponse(response, MessageJson.toJson(msg));
+        } catch (APIException e) {
+            e.generateHttpResponse(response);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String pathInfo = request.getPathInfo();
+
+            // DELETE /messages/{id}
+            if (pathInfo == null || pathInfo.equals("/")) {
+                throw new APIException("ID requis pour DELETE", 400);
             }
-            //Supprimer le message
-            access.deleteOne(Filters.eq("_id", oid));
-            //Reponse 204 définie dans openapi.yml
+
+            pathInfo = pathInfo.substring(1);
+            messageService.deleteMessage(pathInfo);
             response.setStatus(204);
-            out.println("Le message d'id " + oid.toHexString() + " a été supprimé");
-            out.close();
-
-        } else if(method.equals("PUT")) {
-            
-            //Mettre à jour le message
-            BufferedReader reader = null;
-            try {
-                reader = request.getReader();
-            } catch (IOException e){
-                throw new APIException("Erreur interne", 500);
-            }
-            StringBuilder sb = new StringBuilder();
-            String line;
-            try {
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
-            } catch (IOException e) {
-                throw new APIException("Erreur interne", 500);
-            }
-            //Conversion du message JSON en objet Message
-            Message msg = MessageJson.toMessage(sb.toString());
-            if(msg == null) {
-                throw new APIException("Erreur de format", 400);
-            } else {
-                access.replaceOne(Filters.eq("_id", oid), msg);
-            }
-            PrintWriter out;
-            try {
-                out = response.getWriter();
-            } catch (IOException e) {
-                throw new APIException("Erreur interne", 500);
-            }
-            response.setStatus(200);
-            out.println(MessageJson.toJson(msg));
-            out.close();
-
-        } else if(method.equals("GET")) {
-            
-            Message msg = access.find(Filters.eq("_id", oid)).first();
-            if(msg == null) {
-                throw new APIException("Le message d'id " + oid.toHexString() + " n'existe pas", 404);
-            }
-            PrintWriter out;
-            try {
-                out = response.getWriter();
-            } catch (IOException e) {
-                throw new APIException("Erreur interne", 500);
-            }
-            out.println(MessageJson.toJson(msg));
-            out.close();
-
+        } catch (APIException e) {
+            e.generateHttpResponse(response);
         }
-
-        throw new APIException("Méthode non implémenté", 501);
     }
-    
-    private void handleNewMessage(HttpServletRequest request, HttpServletResponse response) throws APIException {
-        // Méthode POST => Créer un message
-        // Récupérer le message depuis le corps de la requête
-        BufferedReader reader = null;
-        try {
-            reader = request.getReader();
-        } catch (IOException e){
-            throw new APIException("Erreur interne", 500);
-        }
+
+    private String getRequestBody(HttpServletRequest request) throws IOException {
+        BufferedReader reader = request.getReader();
         StringBuilder sb = new StringBuilder();
         String line;
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
-        } catch (IOException e) {
-            throw new APIException("Erreur interne", 500);
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
         }
-        //Conversion du message JSON en objet Message avec readed = false
-        Message msg = MessageJson.toMessagePOST(sb.toString());
-        if(msg == null) {
-            throw new APIException("Erreur de format", 400);
-        } else {
-            access.insertOne(msg);
-        }
-        PrintWriter out;
-        try {
-            out = response.getWriter();
-        } catch (IOException e) {
-            throw new APIException("Erreur interne", 500);
-        }
-        response.setStatus(201);
-        out.println(MessageJson.toJson(msg));
-        out.close();
+        return sb.toString();
     }
 
+    private void writeResponse(HttpServletResponse response, String message) throws IOException {
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.println(message);
+        out.close();
+    }
 }

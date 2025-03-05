@@ -22,7 +22,7 @@ public class MessageJson {
         return doc.toJson();
     }
 
-    public static Message toMessage(String json) throws APIException  {
+    public static Message toMessage(String json, boolean isPost) throws APIException {
         if (json == null || json.isEmpty()) {
             return null;
         }
@@ -36,55 +36,30 @@ public class MessageJson {
 
             try {
                 String text = doc.getString("text");
-                Boolean readed = doc.getBoolean("readed");
                 Integer student = doc.getInteger("student");
+                Boolean readed = isPost ? false : doc.getBoolean("readed");
 
-                if(text == null || readed == null || student == null) {
+                if (text == null || student == null || (!isPost && readed == null)) {
                     throw new APIException("Le message n'est pas valide!", 400);
                 }
 
                 return new Message(id, text, readed, student);
-            } catch(ClassCastException e) {
+            } catch (ClassCastException e) {
                 throw new APIException("Le message n'est pas valide!", 400);
             }
 
-        } catch (APIException e) {
-            throw e;
         } catch (Exception e) {
             throw new APIException("Le message n'est pas valide!", 400);
         }
     }
 
-    public static Message toMessagePOST(String json) throws APIException  {
-        if (json == null || json.isEmpty()) {
-            return null;
-        }
-
-        try {
-            Document doc = Document.parse(json);
-
-            ObjectId id = doc.containsKey("id") && doc.getString("id") != null
-                    ? new ObjectId(doc.getString("id"))
-                    : null;
-
-            try {
-                String text = doc.getString("text");
-                Boolean readed = false;
-                Integer student = doc.getInteger("student");
-
-                if(text == null || student == null) {
-                    throw new APIException("Le message n'est pas valide!", 400);
-                }
-
-                return new Message(id, text, readed, student);
-            } catch(ClassCastException e) {
-                throw new APIException("Le message n'est pas valide!", 400);
-            }
-
-        } catch (APIException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new APIException("Le message n'est pas valide!", 400);
-        }
+    // Alias pour les cas spécifiques
+    public static Message toMessage(String json) throws APIException {
+        return toMessage(json, false);
     }
+
+    public static Message toMessagePOST(String json) throws APIException {
+        return toMessage(json, true);
+    }
+
 }

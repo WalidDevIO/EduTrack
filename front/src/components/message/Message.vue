@@ -1,9 +1,9 @@
 <template>
     <VSheet elevation="5" class="mt-6 pa-5 rounded-lg w-100">
-        <VContainer v-if="messages">
+        <VContainer v-if="model">
             <VRow>
                 <VCol>
-                    <ListeMessage @select="handleSelect" @delete="handleDelete" :messages="messages" />
+                    <ListeMessage @select="handleSelect" @delete="handleDelete" :messages="model" />
                 </VCol>
             </VRow>
         </VContainer>
@@ -14,19 +14,15 @@
 import { onMounted, ref } from 'vue';
 import { api } from '@/utils/axios';
 
-const messages = ref()
+const model = defineModel()
 
 const handleSelect = (msg) => {
     api.put('/students/messages/read', msg)
-    messages.value.find(m => m === msg).readed = true
+    model.value.find(m => m === msg).readed = true
 }
 
 const handleDelete = (id) => {
     api.delete(`/students/messages/${id}`)
-    messages.value = messages.value.filter(m => m.id !== id)
+    model.value = model.value.filter(m => m.id !== id)
 }
-
-onMounted(() => {
-    api.get('/students/messages').then(r => messages.value = r.data).catch(console.error)
-})
 </script>

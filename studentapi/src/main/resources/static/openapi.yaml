@@ -123,6 +123,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Student'
+        '400':
+          description: Données de l'étudiant non valides
         '500':
           description: Erreur interne du serveur
   /students/import-students:

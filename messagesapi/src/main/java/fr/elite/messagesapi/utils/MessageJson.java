@@ -3,8 +3,8 @@ package fr.elite.messagesapi.utils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import fr.elite.messagesapi.entities.Message;
 import fr.elite.messagesapi.exceptions.APIException;
-import fr.elite.messagesapi.pojo.Message;
 
 public class MessageJson {
 

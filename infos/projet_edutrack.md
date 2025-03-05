@@ -45,9 +45,6 @@ CREATE TABLE access (
     username VARCHAR(255) NOT NULL UNIQUE, -- Nom d'utilisateur
     PRIMARY KEY (id)
 );
-
-  
-
 ```
 ### Base `student`
 
@@ -66,16 +63,12 @@ CREATE TABLE student (
     pw INT(11), -- Groupe de TP
     PRIMARY KEY (id)
 );
-
-  
-
 ```
 ### Serveur MongoDB
 
 Le serveur MongoDB contient une base nommée `main`, avec une collection `messages` :
 
 ```json
-
 {
     "_id": "ObjectId", // Identifiant unique du message
     "text": "String", // Contenu du message
@@ -114,14 +107,57 @@ Les fichiers sources du projet sont organisés ainsi :
 - **`front/`** → Application VueJS
 - **`expressApi/`** → Implémentation simplifiée de CoreAPI
 ---
+## Architecture de nos APIs
+
+Nous avons découpé nos APIs de manière à fonctionner en couches, pour chaque API on a:
+
+- Une couche entités qui définit le schéma de persistance
+
+- Une couche contrôleurs qui map les URL (Une servlet pour MessageAPI, des RestController pour les API avec Spring)
+
+- Une couche services qui inclut une interface et son implémentation et qui gère la logique métier
+
+- Parfois des exceptions spécifiques (APIException pour MessageAPI ou BannedTokenException pour AuthAPI)
+
+### Spécifiques aux APIs
+
+#### Les API avec Spring
+
+- Couche repository pour l'accès aux données
+
+#### AuthAPI
+
+- Couche sécurité (Gestion de token JWT et configuration de Spring Security)
+
+- Couche configuration qui fourni une Bean pour l'encrypter de mot de passe
+
+- Couche DTO pour les schémas de requête et réponse HTTP
+
+#### StudentAPI
+
+Nous avons deux implémentations de cette API, une avec DTO une sans.
+Nous rendrons probablement celle sans car selon nous la couche DTO n'a pas de grande utilité ici étant donné que les données reçus sont sensiblement les mêmes que celles envoyés et que les DTO ajoute beaucoup de charge inutile.
+
+Par exemple pour import etudiants mapper une première fois les DTO en entités, les sauvegarder, puis les remapper en DTO
+C'est en soit assez simple mais pour nous ça alourdit la tâche surtout que le DTO et l'entité sont les mêmes.
+
+#### MessageAPI
+
+- Une couche filtres qui nous permettait de ne pas avoir de soucis avec les headers CORS lors de nos tests
+
+- Une couche accès qui fourni un singleton d'accès à la collection MongoDB
+
+- Une couche configuration que nous utilisions pour afficher la stacktrace lors de la levée d'APIException
+
+- Une couche utils qui nous permet de mapper des Message en JSON et du JSON en Message
+
+---
 ## Docker
 L'ensemble de l'application est **dockerisée**. Pour la déployer, exécutez les commandes suivantes :
 
 ```bash
-pnpm -C ./expressApi i  # Installation des dépendances de l'API Core
-
+pnpm -C ./expressApi i  # Installation des dépendances de CoreAPI
 pnpm -C ./front i        # Installation des dépendances du front VueJS
-
 docker compose up --build  # Construction et lancement des autres APIs
 ```
 

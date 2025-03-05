@@ -1,8 +1,9 @@
-package fr.elite.messagesapi.servlet;
+package fr.elite.messagesapi.controllers;
 
+import fr.elite.messagesapi.entities.Message;
 import fr.elite.messagesapi.exceptions.APIException;
-import fr.elite.messagesapi.pojo.Message;
 import fr.elite.messagesapi.services.MessageService;
+import fr.elite.messagesapi.services.impl.MessageServiceImpl;
 import fr.elite.messagesapi.utils.MessageJson;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,7 +18,7 @@ import java.util.List;
 @WebServlet("/messages/*")
 public class MessageServlet extends HttpServlet {
 
-    private final MessageService messageService = new MessageService();
+    private final MessageService messageService = new MessageServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

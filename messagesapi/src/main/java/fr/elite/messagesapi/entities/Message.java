@@ -1,4 +1,4 @@
-package fr.elite.messagesapi.pojo;
+package fr.elite.messagesapi.entities;
 
 import org.bson.types.ObjectId;
 

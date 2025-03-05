@@ -18,6 +18,7 @@ services:
       - si_proj_nosql:/data/db
 
   authapi:
+    image: walkloly/projet-si:authapi
     build:
       context: ./authapi
     depends_on:
@@ -25,6 +26,7 @@ services:
         condition: service_healthy
 
   studentapi:
+    image: walkloly/projet-si:studentapi
     build: 
       context: ./studentapi
     depends_on:
@@ -32,12 +34,14 @@ services:
         condition: service_healthy
 
   messageapi:
+    image: walkloly/projet-si:messageapi
     build: 
       context: ./messagesapi
     depends_on:
       - mongodb
 
   coreapi:
+    image: walkloly/projet-si:coreapi
     build:
       context: ./expressApi
     ports:
@@ -48,6 +52,7 @@ services:
       - studentapi
 
   front:
+    image: walkloly/projet-si:front
     build:
       context: ./front
     ports:

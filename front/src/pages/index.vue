@@ -14,7 +14,7 @@ onMounted(async () => {
         const isTokenStoredValid = await authStore.checkConnection()
         if(!isTokenStoredValid) {
             //Token invalide donc => Redirection page de connexion
-            router.push('/login')
+            authStore.logout(false)
             return
         }
     }

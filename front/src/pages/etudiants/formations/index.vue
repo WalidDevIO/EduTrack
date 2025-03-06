@@ -55,9 +55,6 @@ const headers = [
 ]
 
 onMounted(async () => {
-    if(authStore.role !== "student") {
-        router.push('/')
-    }
     await api.get("/students/me").then(r => {
         if (r.data.student.academicYearId) {
             router.push('/etudiants/dashboard')

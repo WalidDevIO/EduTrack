@@ -20,7 +20,9 @@
                         </VBtn>
                     </template>
                     <template v-else>
-                        <!-- TODO: Bouton attribution de groupe manuelle -->
+                         <VBtn class="mr-2" @click="attributeGroup(item)">
+                            Attribuer groupe manuellement
+                         </VBtn>
                         <VBtn class="mr-2" color="red" @click="studentValidation(item.id, false)">
                             Virer
                         </VBtn>
@@ -33,6 +35,8 @@
         </VSheet>
     </VContainer>
 
+    <ManualGroupAttribution v-if="student" @change="handleChangeGroup" :student="student" v-model:show="showGroupAttributionModal"/>
+
     <Snackbar v-model="showSnackbar" text="Une erreure est survenue" />
 </template>
 
@@ -42,11 +46,13 @@ import { adminStudentHeaders } from '@/utils/dataTableHeaders';
 import { computed, onMounted, ref } from 'vue';
 
 const showSnackbar = ref(false)
+const showGroupAttributionModal = ref(false)
 
 const loading = ref(true)
 const formation = ref({})
 const students = ref([])
 const ues = ref([])
+const student = ref()
 
 const onlyNotYetRegistered = ref(false)
 
@@ -86,6 +92,16 @@ const attributeGroups = async () => {
     if(ok) await api.get(`/formations/${props.id}/students`).then(r => students.value = r.data)
     else showSnackbar.value = true
     loading.value = false
+}
+
+const attributeGroup = (item) => {
+    student.value = item
+    showGroupAttributionModal.value = true
+}
+
+const handleChangeGroup = (groups) => {
+    student.dw = groups.td
+    student.pw = groups.tp
 }
 
 onMounted(async () => {

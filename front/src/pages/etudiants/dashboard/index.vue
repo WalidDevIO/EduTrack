@@ -18,7 +18,6 @@
 </template>
 
 <script setup>
-import { useAuthStore } from '@/stores/auth';
 import { api } from '@/utils/axios';
 import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
@@ -26,7 +25,6 @@ import { studentUesHeaders } from '@/utils/dataTableHeaders';
 
 const infos = ref()
 const loading = ref(true)
-const authStore = useAuthStore()
 const router = useRouter()
 const ues = ref([])
 const messages = ref([])
@@ -51,7 +49,6 @@ const handleOptions = async (id, add = true) => {
 }
 
 onMounted(async () => {
-    if(authStore.role !== "student") router.push('/')
     await api.get("/students/me").then(r => infos.value = r.data)
     if(!infos.value.student.academicYearId) {
         router.push('/etudiants/formations')

@@ -53,8 +53,8 @@ export const useAuthStore = defineStore('authStore', () => {
             })
     }
 
-    const logout = async () => {
-        await api.delete(`/auth/logout`).catch(console.error)
+    const logout = async (makeRequest = true) => {
+        if(makeRequest) await api.delete(`/auth/logout`).catch(console.error)
         localStorage.removeItem('token')
         isLogged.value = false
         router.push('/login')

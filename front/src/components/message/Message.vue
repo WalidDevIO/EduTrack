@@ -11,7 +11,6 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
 import { api } from '@/utils/axios';
 
 const model = defineModel()

@@ -34,6 +34,19 @@ router.isReady().then(() => {
   localStorage.removeItem('vuetify:dynamic-reload')
 })
 
-//TODO: Implement guards !
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+
+  if(to.path.startsWith("/admin") && authStore.role !== "admin") {
+    console.warn("Not admin")
+    next("/")
+  }
+
+  if(to.path.startsWith("/etudiants") && authStore.role !== "student") {
+    console.warn("Not student")
+    next("/")
+  }
+  next()
+})
 
 export default router

@@ -11,7 +11,7 @@
         </VForm>
     </v-sheet>
 
-    <VDialog v-model="showConfirmDialog">
+    <VDialog v-model="showConfirmDialog" max-width="400">
         <VCard>
             <VCardText>Êtes-vous sûr de vouloir modifier le mot de passe ?</VCardText>
             <VCardActions>

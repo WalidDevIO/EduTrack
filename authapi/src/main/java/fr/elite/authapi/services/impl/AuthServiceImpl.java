@@ -78,7 +78,7 @@ public class AuthServiceImpl implements AuthService {
             access = accessRepository.findByUsername(username).orElse(null);
         }
 
-        return new MeResponse(valid, access.getStudent());
+        return new MeResponse(valid, access != null ? access.getStudent() : null);
     }
 
     @Override

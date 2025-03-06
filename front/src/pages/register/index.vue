@@ -1,7 +1,7 @@
 <template>
     <AuthForm :auth="register" :registerMode="true" />
 
-    <VDialog v-model="showDialog" max-width="400">
+    <VDialog v-model="showDialog">
         <VCard class="mx-auto w-25">
             <VCardTitle>
                 {{ text !== "Erreur" ? "Inscription réussie" : "Erreur" }}

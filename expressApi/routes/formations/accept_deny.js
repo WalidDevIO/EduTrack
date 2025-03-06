@@ -57,7 +57,10 @@ const treat = async (req, res, status) => {
             academicYearRegistered: status,
             academicYearId: null
         })
-        await sendMessage(`Vous avez été ${status ? "accepté" : "refusé"} dans la formation ${formation.nom}.`, student.id)
+        sendMessage(`Vous avez été ${status ? "accepté" : "refusé"} dans la formation ${formation.nom}.`, student.id)
+        if(status && student.coursesId.length === formation.options) {
+            sendMessage("Votre inscription est finalisée!", student.id)
+        }
     } else {
         res.status(500).send()
     }

@@ -101,6 +101,9 @@ const treat = async (req, res, add) => {
             detail: "Opération réussie"
         })
         sendMessage(`Vous vous êtes ${add ? 'inscrit à' : 'désinscrit de'} l'UE ${ue.nom}.`, student.id)
+        if(newStudent.coursesId.length === formation.options) {
+            sendMessage("Votre inscription est finalisée!", student.id)
+        }
     } else {
         //Erreur dans l'API Etudiant
         res.status(500).send({

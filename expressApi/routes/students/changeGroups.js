@@ -39,14 +39,14 @@ export async function changeGroups(req, res) {
     const maxTd = Math.max(...studentsGroups.map(e => e[0]))
     const maxTp = Math.max(...studentsGroups.map(e => e[1]))
 
-    if(td < 1 || td > maxTd) {
+    if(td < 1 || td > maxTd || student.dw == td) {
         res.status(400).send({
             detail: "Groupe de TD invalide"
         })
         return
     }
 
-    if (tp < 1 || tp > maxTp) {
+    if (tp < 1 || tp > maxTp || student.pw == tp) {
         res.status(400).send({
             detail: "Groupe de TP invalide"
         })
@@ -87,6 +87,8 @@ export async function changeGroups(req, res) {
         })
         await sendMessage(`Vous faites maintenant partie du groupe de TD ${td} et du groupe de TP ${tp}.`)
     } else {
-        res.status(500).send()
+        res.status(500).send({
+            detail: "Erreur interne"
+        })
     }
 }

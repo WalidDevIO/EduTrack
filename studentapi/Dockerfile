@@ -1,10 +1,10 @@
-FROM openjdk:17-jdk-bullseye AS build-stage
+FROM eclipse-temurin:17-jdk-alpine AS build-stage
 COPY . /build
 WORKDIR /build
 
 RUN ./gradlew clean bootJar
 
-FROM openjdk:17-jdk-bullseye AS final-stage
+FROM eclipse-temurin:17-jdk-alpine AS final-stage
 
 WORKDIR /app
 COPY --from=build-stage /build/build/libs/studentapi-1.0.jar app.jar
